@@ -17,6 +17,12 @@ export default {
     ...mapState({
       count: state => state.count
     }),
+  },
+  mounted() {
+    window.Echo.channel('channel')
+      .listen('Event', (e) => {
+        console.log(e);
+      });
   }
 }
 </script>
