@@ -28,6 +28,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'home',
@@ -40,6 +44,39 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     window.Echo.channel('channel').listen('Hello', function (e) {
       console.log(e);
     });
+  },
+  methods: {
+    joinGame: function joinGame() {
+      var _this = this;
+
+      // redirect to /game/join
+      axios.post('/api/game/join').then(function (response) {
+        _this.$router.push('/game');
+      });
+    },
+    login: function login() {
+      axios.post('/api/login', {
+        email: 'leonlav77@gmail.com',
+        password: 'password'
+      }).then(function (response) {
+        console.log(response.data);
+      });
+    },
+    register: function register() {
+      axios.post('/api/register', {
+        name: 'username',
+        email: 'leonlav77@gmail.com',
+        password: 'password',
+        password_confirmation: 'password'
+      }).then(function (response) {
+        console.log(response.data);
+      });
+    },
+    createLobby: function createLobby() {
+      axios.post('/api/lobby/create').then(function (response) {
+        console.log(response.data);
+      });
+    }
   }
 });
 
@@ -148,6 +185,54 @@ var render = function () {
         },
       },
       [_vm._v("INCREMENT")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.joinGame()
+          },
+        },
+      },
+      [_vm._v("Join game")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.login()
+          },
+        },
+      },
+      [_vm._v("login")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.register()
+          },
+        },
+      },
+      [_vm._v("register")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.createLobby()
+          },
+        },
+      },
+      [_vm._v("create Lobby")]
     ),
   ])
 }
