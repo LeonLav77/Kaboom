@@ -46,12 +46,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   methods: {
-    joinGame: function joinGame() {
+    joinGame: function joinGame(id) {
       var _this = this;
 
       // redirect to /game/join
-      axios.post('/api/game/join').then(function (response) {
-        _this.$router.push('/game');
+      axios.post('/api/lobby/join', {
+        id: id,
+        numberOfPlayers: 2
+      }).then(function (response) {
+        _this.$router.push('/game/' + id);
       });
     },
     login: function login() {
@@ -72,8 +75,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(response.data);
       });
     },
-    createLobby: function createLobby() {
-      axios.post('/api/lobby/create').then(function (response) {
+    logout: function logout() {
+      axios.post('/api/logout').then(function (response) {
         console.log(response.data);
       });
     }
@@ -192,7 +195,7 @@ var render = function () {
       {
         on: {
           click: function ($event) {
-            return _vm.joinGame()
+            return _vm.joinGame(69)
           },
         },
       },
@@ -228,11 +231,11 @@ var render = function () {
       {
         on: {
           click: function ($event) {
-            return _vm.createLobby()
+            return _vm.logout()
           },
         },
       },
-      [_vm._v("create Lobby")]
+      [_vm._v("logout")]
     ),
   ])
 }

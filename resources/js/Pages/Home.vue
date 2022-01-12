@@ -5,10 +5,10 @@
       {{ count }}
     </h1>
     <button class="btn" @click="$store.commit('INCREMENT')">INCREMENT</button>
-    <button @click="joinGame()">Join game</button>
+    <button @click="joinGame(69)">Join game</button>
     <button @click="login()">login</button>
     <button @click="register()">register</button>
-    <button @click="createLobby()">create Lobby</button>
+    <button @click="logout()">logout</button>
   </div>
 </template>
 
@@ -29,10 +29,13 @@ export default {
       });
   },
   methods: {
-    joinGame() {
+    joinGame(id) {
       // redirect to /game/join
-      axios.post('/api/game/join').then(response => {
-        this.$router.push('/game');
+      axios.post('/api/lobby/join',{
+        id: id,
+        numberOfPlayers: 2,
+      }).then(response => {
+        this.$router.push('/game/'+id);
       });
     },
     login() {
@@ -55,11 +58,11 @@ export default {
           console.log(response.data);
       });
     },
-    createLobby() {
-      axios.post('/api/lobby/create').then(response => {
+    logout() {
+      axios.post('/api/logout').then(response => {
         console.log(response.data);
       });
-    }
+    },
   }
 }
 </script>

@@ -1877,7 +1877,7 @@ var routes = [{
   },
   name: 'about'
 }, {
-  path: '/game',
+  path: '/game/:id',
   component: function component() {
     return __webpack_require__.e(/*! import() */ "resources_js_Pages_Game_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Pages/Game.vue */ "./resources/js/Pages/Game.vue"));
   },

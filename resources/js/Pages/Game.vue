@@ -2,6 +2,7 @@
     <div class="wrapper">
         <!-- 4 squares in the middle where the players photo will be -->
         <PlayerIcon v-for="(player, index) in players" :player="player" :key="index" />
+        <!-- {{ $route.params.id }} -->
     </div>
 </template>
 
@@ -14,7 +15,11 @@ export default {
         players: [],
     }),
     mounted() {
-        axios.get('/api/game/players').then(response => {
+        // axios.get('/api/game/players').then(response => {
+        //     console.log(response.data)
+        //     this.players = response.data;
+        // });
+        axios.get('/api/lobby/users/'+this.$route.params.id).then(response => {
             console.log(response.data)
             this.players = response.data;
         });

@@ -17,4 +17,15 @@ class LobbiesUsers extends Model
     {
         return $this->belongsTo(Lobby::class);
     }
+    public static function addUser($lobby_id,$user_id)
+    {
+        return (new static)::create([
+            'user_id' => $user_id,
+            'lobby_id' => $lobby_id,
+        ]);
+    }
+    public static function getUsers($lobby_id)
+    {
+        return (new static)::where('lobby_id',$lobby_id)->get();
+    }
 }

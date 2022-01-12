@@ -18,6 +18,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -32,7 +33,11 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    axios.get('/api/game/players').then(function (response) {
+    // axios.get('/api/game/players').then(response => {
+    //     console.log(response.data)
+    //     this.players = response.data;
+    // });
+    axios.get('/api/lobby/users/' + this.$route.params.id).then(function (response) {
       console.log(response.data);
       _this.players = response.data;
     });

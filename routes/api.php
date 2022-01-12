@@ -21,9 +21,10 @@ Route::get('/users',[TestController::class,'index']);
 
 route::get('game/players',[GameController::class,'players']);
 
-Route::post('/lobby/join/{id}',[GameController::class,'joinLobby']);
+Route::post('/lobby/join',[GameController::class,'joinLobby'])->middleware('loggedIn');
 
-Route::post('/lobby/create',[GameController::class,'createLobby']);
+Route::get('/lobby/users/{id}',[GameController::class,'getLobbyUsers'])->middleware('loggedIn');
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -10,23 +10,21 @@ use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
-    public function joinLobby($id){
-        $lobby = Lobby::find($id);
-        $lobby->players()->attach(Auth::user()->id);
-        return response()->json(['success' => true]);
+    public function joinLobby(request $request){
+        $lobby = Lobby::firstOrCreate([
+            'id' => $request->id,
+            'number_of_players' => $request->number_of_players ?? 2
+        ]);
+        // discconect user from other lobbies
+        // $lobby->users()->detach(Auth::user()->id); in a different form
+        LobbiesUsers::where('user_id',Auth::user()->id)->delete();
+        LobbiesUsers::addUser($lobby->id,Auth::user()->id);
+        return response()->json(['success' => $lobby]);
     }
-    public function createLobby(request $request){
-        // $lobby = new Lobby();
-        // $lobby->number_of_players = $request->number_of_players ?? 2;
-        $lobby = Lobby::create([
-            'number_of_players' => $request->number_of_players ?? 2,
-        ]);
-        LobbiesUsers::create([
-            'user_id' => Auth::user()->id,
-            'lobby_id' => $lobby->id,
-        ]);
-        $lobby->save(); 
-        return response()->json(['success' => LobbiesUsers::first()->user]);
+    public function getLobbyUsers($id){
+        $lobby = Lobby::find($id);
+        $users = LobbiesUsers::getUsers($lobby->id)->load('user');
+        return response()->json($users);
     }
     public function players(){
         $players = [
