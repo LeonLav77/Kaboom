@@ -24,10 +24,6 @@ export default {
     data: () => ({
         players: [],
         components: [Comp],
-        player: {
-            id: '',
-            name: '',
-        },
 
     }),
     mounted() {
@@ -36,17 +32,14 @@ export default {
             for (let i = 0; i < response.data.length; i++) {
                 this.players.push(response.data[i].user)
             }
+            console.log(this.players)
         });
         
     },
     methods: {
         add() {
-            // add a player icon and pass a prop to it
-            this.components.push({
-                player: this.player,
-                template: '<PlayerIcon :player="player" />'
-            });
-            // this.components.push(PlayerIcon);
+            this.components.push(Comp)
+            // when a ws message is received, add a new player to the list
         }
     }
 

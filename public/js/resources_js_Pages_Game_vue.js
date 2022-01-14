@@ -37,11 +37,7 @@ var Comp = {
   data: function data() {
     return {
       players: [],
-      components: [Comp],
-      player: {
-        id: '',
-        name: ''
-      }
+      components: [Comp]
     };
   },
   mounted: function mounted() {
@@ -53,15 +49,13 @@ var Comp = {
       for (var i = 0; i < response.data.length; i++) {
         _this.players.push(response.data[i].user);
       }
+
+      console.log(_this.players);
     });
   },
   methods: {
     add: function add() {
-      // add a player icon and pass a prop to it
-      this.components.push({
-        player: this.player,
-        template: '<PlayerIcon :player="player" />'
-      }); // this.components.push(PlayerIcon);
+      this.components.push(Comp); // when a ws message is received, add a new player to the list
     }
   }
 });
