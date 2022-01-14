@@ -113,9 +113,7 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "playerIcon" }, [
-    _c("img", {
-      attrs: { src: _vm.player.user.photo, alt: _vm.player.user.name },
-    }),
+    _c("img", { attrs: { src: _vm.player.photo, alt: _vm.player.name } }),
   ])
 }
 var staticRenderFns = []

@@ -1,6 +1,6 @@
 <template>
   <div class="playerIcon">
-    <img :src="player.user.photo" :alt="player.user.name" />
+    <img :src="player.photo" :alt="player.name" />
   </div>
 </template>
 <script>

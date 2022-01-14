@@ -19,6 +19,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+var Comp = {
+  template: '<div>Hello world</div>'
+}; // import PlayerIcon from '../Components/PlayerIcon.vue';
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -27,20 +36,33 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      players: []
+      players: [],
+      components: [Comp],
+      player: {
+        id: '',
+        name: ''
+      }
     };
   },
   mounted: function mounted() {
     var _this = this;
 
-    // axios.get('/api/game/players').then(response => {
-    //     console.log(response.data)
-    //     this.players = response.data;
-    // });
     axios.get('/api/lobby/users/' + this.$route.params.id).then(function (response) {
       console.log(response.data);
-      _this.players = response.data;
+
+      for (var i = 0; i < response.data.length; i++) {
+        _this.players.push(response.data[i].user);
+      }
     });
+  },
+  methods: {
+    add: function add() {
+      // add a player icon and pass a prop to it
+      this.components.push({
+        player: this.player,
+        template: '<PlayerIcon :player="player" />'
+      }); // this.components.push(PlayerIcon);
+    }
   }
 });
 
@@ -199,10 +221,28 @@ var render = function () {
   return _c(
     "div",
     { staticClass: "wrapper" },
-    _vm._l(_vm.players, function (player, index) {
-      return _c("PlayerIcon", { key: index, attrs: { player: player } })
-    }),
-    1
+    [
+      _vm._l(_vm.components, function (component, index) {
+        return _c(component, {
+          key: index,
+          tag: "component",
+          attrs: { player: component.player },
+        })
+      }),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          on: {
+            click: function ($event) {
+              return _vm.add()
+            },
+          },
+        },
+        [_vm._v("Add")]
+      ),
+    ],
+    2
   )
 }
 var staticRenderFns = []

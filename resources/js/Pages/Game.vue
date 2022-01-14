@@ -1,29 +1,55 @@
 <template>
     <div class="wrapper">
-        <!-- 4 squares in the middle where the players photo will be -->
-        <PlayerIcon v-for="(player, index) in players" :player="player" :key="index" />
-        <!-- {{ $route.params.id }} -->
+        <!-- <PlayerIcon v-for="(player, index) in players" :player="player" :key="index" /> -->
+  <component
+    v-for="(component, index) in components"
+    :key="index"
+    :player="component.player"
+    :is="component"
+  />
+  <button @click="add()">Add</button>
     </div>
 </template>
 
 <script>
+const Comp = {
+ template: '<div>Hello world</div>'
+}
+// import PlayerIcon from '../Components/PlayerIcon.vue';
+
 export default {
     components: {
         PlayerIcon: () => import('../Components/PlayerIcon.vue')
     },
     data: () => ({
         players: [],
+        components: [Comp],
+        player: {
+            id: '',
+            name: '',
+        },
+
     }),
     mounted() {
-        // axios.get('/api/game/players').then(response => {
-        //     console.log(response.data)
-        //     this.players = response.data;
-        // });
         axios.get('/api/lobby/users/'+this.$route.params.id).then(response => {
             console.log(response.data)
-            this.players = response.data;
+            for (let i = 0; i < response.data.length; i++) {
+                this.players.push(response.data[i].user)
+            }
         });
+        
     },
+    methods: {
+        add() {
+            // add a player icon and pass a prop to it
+            this.components.push({
+                player: this.player,
+                template: '<PlayerIcon :player="player" />'
+            });
+            // this.components.push(PlayerIcon);
+        }
+    }
+
 }
 </script>
 
