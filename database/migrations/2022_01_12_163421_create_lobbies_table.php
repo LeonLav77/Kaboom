@@ -16,6 +16,7 @@ class CreateLobbiesTable extends Migration
         Schema::create('lobbies', function (Blueprint $table) {
             $table->id();
             $table->integer('number_of_players');
+            $table->string('status');
             $table->timestamps();
         });
     }

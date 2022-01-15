@@ -3,50 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
-use App\Models\LobbiesUsers;
 use App\Models\Lobby;
+use App\Models\LobbiesUsers;
 use Illuminate\Http\Request;
+use App\Events\UserJoinedLobby;
 use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
     public function joinLobby(request $request){
-        $lobby = Lobby::firstOrCreate([
-            'id' => $request->id,
-            'number_of_players' => $request->number_of_players ?? 2
-        ]);
-        // discconect user from other lobbies
-        // $lobby->users()->detach(Auth::user()->id); in a different form
+        // if there is a empty lobby, join that one
+        // if there is no empty lobby create a new one
+        $lobby = Lobby::where('status', 'waiting')->first();
+        if(!$lobby){
+            $lobby = new Lobby();
+            $lobby->number_of_players = $request->number_of_players ?? 2;
+            $lobby->status = 'waiting';
+            $lobby->save();
+        }
         LobbiesUsers::where('user_id',Auth::user()->id)->delete();
         LobbiesUsers::addUser($lobby->id,Auth::user()->id);
-        return response()->json(['success' => $lobby]);
+        broadcast(new UserJoinedLobby($lobby->id))->toOthers();
+        if($lobby->number_of_players == $lobby->players()->count()){
+            $lobby->status = 'full';
+            $lobby->save();
+        }
+        return response()->json($lobby);
     }
     public function getLobbyUsers($id){
         $lobby = Lobby::find($id);
         $users = LobbiesUsers::getUsers($lobby->id)->load('user');
         return response()->json($users);
-    }
-    public function players(){
-        $players = [
-            'player1' => [
-                'name' => 'John',
-                'photo' => 'https://picsum.photos/150/150?random=2'
-            ],
-            'player2' => [
-                'name' => 'Jane',
-                'photo' => 'https://picsum.photos/150/150?random=3'
-            ],
-            'player3' => [
-                'name' => 'Jack',
-                'photo' => 'https://picsum.photos/150/150?random=4'
-            ],
-            'player4' => [
-                'name' => 'Jill',
-                'photo' => 'https://picsum.photos/150/150?random=5'
-            ],
-
-        ];
-        return response()->json($players);
     }
     // game logic:
     // game starts with x number of players

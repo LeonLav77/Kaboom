@@ -46,15 +46,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   methods: {
-    joinGame: function joinGame(id) {
+    joinGame: function joinGame() {
       var _this = this;
 
       // redirect to /game/join
       axios.post('/api/lobby/join', {
-        id: id,
         numberOfPlayers: 2
       }).then(function (response) {
-        _this.$router.push('/game/' + id);
+        _this.$router.push('/lobby/' + response.data.id);
       });
     },
     login: function login() {
@@ -65,10 +64,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(response.data);
       });
     },
+    login2: function login2() {
+      axios.post('/api/login', {
+        email: 'leonlav7@gmail.com',
+        password: 'password'
+      }).then(function (response) {
+        console.log(response.data);
+      });
+    },
+    login3: function login3() {
+      axios.post('/api/login', {
+        email: 'leonlav@gmail.com',
+        password: 'password'
+      }).then(function (response) {
+        console.log(response.data);
+      });
+    },
     register: function register() {
       axios.post('/api/register', {
         name: 'username',
         email: 'leonlav77@gmail.com',
+        password: 'password',
+        password_confirmation: 'password'
+      }).then(function (response) {
+        console.log(response.data);
+      });
+    },
+    register2: function register2() {
+      axios.post('/api/register', {
+        name: 'usernam',
+        email: 'leonlav7@gmail.com',
+        password: 'password',
+        password_confirmation: 'password'
+      }).then(function (response) {
+        console.log(response.data);
+      });
+    },
+    register3: function register3() {
+      axios.post('/api/register', {
+        name: 'userna',
+        email: 'leonlav@gmail.com',
         password: 'password',
         password_confirmation: 'password'
       }).then(function (response) {
@@ -170,13 +205,6 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "home" }, [
-    _c("img", {
-      staticClass: "logo",
-      attrs: { width: "100", src: "logo.png", alt: "" },
-    }),
-    _vm._v(" "),
-    _c("h1", [_vm._v("\n    " + _vm._s(_vm.count) + "\n  ")]),
-    _vm._v(" "),
     _c(
       "button",
       {
@@ -195,7 +223,7 @@ var render = function () {
       {
         on: {
           click: function ($event) {
-            return _vm.joinGame(69)
+            return _vm.joinGame(71)
           },
         },
       },
@@ -224,6 +252,54 @@ var render = function () {
         },
       },
       [_vm._v("register")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.login2()
+          },
+        },
+      },
+      [_vm._v("login2")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.register2()
+          },
+        },
+      },
+      [_vm._v("register2")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.login3()
+          },
+        },
+      },
+      [_vm._v("login2")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.register3()
+          },
+        },
+      },
+      [_vm._v("register2")]
     ),
     _vm._v(" "),
     _c(

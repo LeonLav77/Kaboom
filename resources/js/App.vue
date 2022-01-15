@@ -17,7 +17,23 @@ import './Styles/app.scss'
      wsHost: process.env.MIX_PUSHER_APP_WS_HOST,
      wsPort: 6001,
      forceTLS: false,
-     disableStats: true
+     disableStats: true,
+     authorizer: (channel, options) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('/api/broadcasting/auth', {
+                    socket_id: socketId,
+                    channel_name: channel.name
+                })
+                .then(response => {
+                    callback(false, response.data);
+                })
+                .catch(error => {
+                    callback(true, error);
+                });
+            }
+        };
+    },
  });
 export default {
   name: 'app',

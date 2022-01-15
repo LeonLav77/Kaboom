@@ -1817,7 +1817,21 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_1__["default"]({
   wsHost: "127.0.0.1",
   wsPort: 6001,
   forceTLS: false,
-  disableStats: true
+  disableStats: true,
+  authorizer: function authorizer(channel, options) {
+    return {
+      authorize: function authorize(socketId, callback) {
+        axios.post('/api/broadcasting/auth', {
+          socket_id: socketId,
+          channel_name: channel.name
+        }).then(function (response) {
+          callback(false, response.data);
+        })["catch"](function (error) {
+          callback(true, error);
+        });
+      }
+    };
+  }
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'app',
@@ -1877,11 +1891,11 @@ var routes = [{
   },
   name: 'about'
 }, {
-  path: '/game/:id',
+  path: '/Lobby/:id',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_Pages_Game_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Pages/Game.vue */ "./resources/js/Pages/Game.vue"));
+    return __webpack_require__.e(/*! import() */ "resources_js_Pages_Lobby_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Pages/Lobby.vue */ "./resources/js/Pages/Lobby.vue"));
   },
-  name: 'Game'
+  name: 'Lobby'
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
 
@@ -42754,7 +42768,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_Pages_Home_vue":1,"resources_js_Pages_About_vue":1,"resources_js_Pages_Game_vue":1,"resources_js_Components_Navbar_vue":1,"resources_js_Components_PlayerIcon_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_Pages_Home_vue":1,"resources_js_Pages_About_vue":1,"resources_js_Pages_Lobby_vue":1,"resources_js_Components_Navbar_vue":1,"resources_js_Components_PlayerIcon_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

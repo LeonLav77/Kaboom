@@ -18,16 +18,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-var Comp = {
-  template: '<div>Hello world</div>'
-}; // import PlayerIcon from '../Components/PlayerIcon.vue';
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -36,13 +26,17 @@ var Comp = {
   },
   data: function data() {
     return {
-      players: [],
-      components: [Comp]
+      players: []
     };
   },
   mounted: function mounted() {
     var _this = this;
 
+    window.Echo.channel('lobby' + this.$route.params.id).listen('UserJoinedLobby', function (e) {
+      console.log(e.user);
+
+      _this.players.push(e.user);
+    });
     axios.get('/api/lobby/users/' + this.$route.params.id).then(function (response) {
       console.log(response.data);
 
@@ -53,11 +47,7 @@ var Comp = {
       console.log(_this.players);
     });
   },
-  methods: {
-    add: function add() {
-      this.components.push(Comp); // when a ws message is received, add a new player to the list
-    }
-  }
+  methods: {}
 });
 
 /***/ }),
@@ -78,7 +68,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.wrapper[data-v-1deb7a1b] {\n      width:300px;\n      height:auto;\n      min-height: 100%;\n      display: flex;\n      flex-wrap: wrap;\n      flex-direction: row;\n      justify-content: center;\n}\n.playerIcon[data-v-1deb7a1b] {\n      display: flex;\n      margin: 10px;\n      flex-basis: calc(50% - 40px);  \n      justify-content: center;\n      flex-direction: column;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.wrapper[data-v-1deb7a1b] {\n      margin: 20px auto;\n      width:400px;\n      height:400px;\n      display:grid;\n      grid-template-columns: 200px 200px;\n      grid-row: auto auto;\n      grid-column-gap: 20px;\n      grid-row-gap: 20px;\n}\n.playerIcon[data-v-1deb7a1b] {\n      background-color:#333;\n      padding:20px;\n      border-radius:10px;\n      color:#fff;\n      display:flex;\n      align-items:center;\n      justify-content:center;\n      font-size:40px;\n      font-family:sans-serif;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -215,28 +205,10 @@ var render = function () {
   return _c(
     "div",
     { staticClass: "wrapper" },
-    [
-      _vm._l(_vm.components, function (component, index) {
-        return _c(component, {
-          key: index,
-          tag: "component",
-          attrs: { player: component.player },
-        })
-      }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          on: {
-            click: function ($event) {
-              return _vm.add()
-            },
-          },
-        },
-        [_vm._v("Add")]
-      ),
-    ],
-    2
+    _vm._l(_vm.players, function (player, index) {
+      return _c("PlayerIcon", { key: index, attrs: { player: player } })
+    }),
+    1
   )
 }
 var staticRenderFns = []

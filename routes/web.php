@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\Hello;
+use App\Events\UserJoinedLobby;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/b', function () {
     broadcast(new Hello());
 });
+
+Route::get('/u', function () {
+    broadcast(new UserJoinedLobby(69));
+});
 Route::get('/{path?}', function () {
     return view('welcome');
-})->where('path', '.*');
+})->where('path', '.*')->name('login');

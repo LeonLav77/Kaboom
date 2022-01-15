@@ -1,13 +1,13 @@
 <template>
   <div class="home">
-    <img class="logo" width="100" src="logo.png" alt="">
-    <h1>
-      {{ count }}
-    </h1>
     <button class="btn" @click="$store.commit('INCREMENT')">INCREMENT</button>
-    <button @click="joinGame(69)">Join game</button>
+    <button @click="joinGame(71)">Join game</button>
     <button @click="login()">login</button>
     <button @click="register()">register</button>
+    <button @click="login2()">login2</button>
+    <button @click="register2()">register2</button>
+    <button @click="login3()">login2</button>
+    <button @click="register3()">register2</button>
     <button @click="logout()">logout</button>
   </div>
 </template>
@@ -29,13 +29,12 @@ export default {
       });
   },
   methods: {
-    joinGame(id) {
+    joinGame() {
       // redirect to /game/join
       axios.post('/api/lobby/join',{
-        id: id,
         numberOfPlayers: 2,
       }).then(response => {
-        this.$router.push('/game/'+id);
+        this.$router.push('/lobby/'+response.data.id);
       });
     },
     login() {
@@ -48,10 +47,50 @@ export default {
         console.log(response.data);
       });
     },
+    login2() {
+      axios.post('/api/login',
+        {
+          email: 'leonlav7@gmail.com',
+          password: 'password',
+        }
+      ).then(response => {
+        console.log(response.data);
+      });
+    },
+    login3() {
+      axios.post('/api/login',
+        {
+          email: 'leonlav@gmail.com',
+          password: 'password',
+        }
+      ).then(response => {
+        console.log(response.data);
+      });
+    },
     register() {
       axios.post('/api/register',{
           name: 'username',
           email: 'leonlav77@gmail.com',
+          password: 'password',
+          password_confirmation: 'password'
+        }).then(response => {
+          console.log(response.data);
+      });
+    },
+    register2() {
+      axios.post('/api/register',{
+          name: 'usernam',
+          email: 'leonlav7@gmail.com',
+          password: 'password',
+          password_confirmation: 'password'
+        }).then(response => {
+          console.log(response.data);
+      });
+    },
+    register3() {
+      axios.post('/api/register',{
+          name: 'userna',
+          email: 'leonlav@gmail.com',
           password: 'password',
           password_confirmation: 'password'
         }).then(response => {

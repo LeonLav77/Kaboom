@@ -32,7 +32,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'photo' => 'https://picsum.photos/150/150?random=3',
+            'photo' => 'https://picsum.photos/150/150?random='.rand(1,5),
         ]);
 
         event(new Registered($user));

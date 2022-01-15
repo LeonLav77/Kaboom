@@ -10,9 +10,9 @@ const routes = [
     name: 'about'
   },
   {
-    path: '/game/:id',
-    component: () => import('../Pages/Game.vue'),
-    name: 'Game'
+    path: '/Lobby/:id',
+    component: () => import('../Pages/Lobby.vue'),
+    name: 'Lobby'
   },
 ]
 
