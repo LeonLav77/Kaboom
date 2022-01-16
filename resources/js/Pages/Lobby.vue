@@ -1,6 +1,15 @@
 <template>
     <div class="wrapper">
         <PlayerIcon v-for="(player, index) in players" :player="player" :key="index" />
+    <div id="countdownTimer">
+        <div id="countdown">
+            <div id="countdown-text">
+                <span id="countdown-time">{{ countDown }}</span>
+                <span id="countdown-text-label">seconds</span>
+            </div>
+            <button id="countdown" class="countdown-button" @click="countDownTimer()">Start</button>
+        </div>
+    </div>
     </div>
 </template>
 
@@ -13,7 +22,8 @@ export default {
         players: [],
         number_of_players: 0,
         me: null,
-        owner: null
+        owner: null,
+        countDown : 10
     }),
     mounted() {
             axios.post('/api/lobbyInfo/'+this.$route.params.id)
@@ -46,7 +56,7 @@ export default {
                 // $('#player-icon-'+user.id).addClass('animated bounceIn');
                 let no_of_players = this.players.length;
                 if(no_of_players == this.number_of_players && this.owner == true) {
-
+                    this.countDownTimer();
                 }
                 // check if lobby is full, if yes start count down
 
@@ -62,8 +72,15 @@ export default {
         
     },
     methods: {
-
-    },
+        countDownTimer() {
+                if(this.countDown > 0) {
+                    setTimeout(() => {
+                        this.countDown -= 1
+                        this.countDownTimer()
+                    }, 1000)
+                }
+        },
+    },  
     beforeRouteLeave (to, from , next) {
         const answer = window.confirm('Do you want to leave the lobby?');
         if (answer) {
@@ -73,7 +90,7 @@ export default {
         } else {
             next(false)
         }
-    }
+    },        
 
 }
 </script>

@@ -17,6 +17,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -28,7 +37,8 @@ __webpack_require__.r(__webpack_exports__);
       players: [],
       number_of_players: 0,
       me: null,
-      owner: null
+      owner: null,
+      countDown: 10
     };
   },
   mounted: function mounted() {
@@ -65,7 +75,9 @@ __webpack_require__.r(__webpack_exports__);
 
       var no_of_players = _this.players.length;
 
-      if (no_of_players == _this.number_of_players && _this.owner == true) {} // check if lobby is full, if yes start count down
+      if (no_of_players == _this.number_of_players && _this.owner == true) {
+        _this.countDownTimer();
+      } // check if lobby is full, if yes start count down
 
     });
     channel.leaving(function (user) {
@@ -77,7 +89,19 @@ __webpack_require__.r(__webpack_exports__);
       console.log(err);
     });
   },
-  methods: {},
+  methods: {
+    countDownTimer: function countDownTimer() {
+      var _this2 = this;
+
+      if (this.countDown > 0) {
+        setTimeout(function () {
+          _this2.countDown -= 1;
+
+          _this2.countDownTimer();
+        }, 1000);
+      }
+    }
+  },
   beforeRouteLeave: function beforeRouteLeave(to, from, next) {
     var answer = window.confirm('Do you want to leave the lobby?');
 
@@ -246,10 +270,40 @@ var render = function () {
   return _c(
     "div",
     { staticClass: "wrapper" },
-    _vm._l(_vm.players, function (player, index) {
-      return _c("PlayerIcon", { key: index, attrs: { player: player } })
-    }),
-    1
+    [
+      _vm._l(_vm.players, function (player, index) {
+        return _c("PlayerIcon", { key: index, attrs: { player: player } })
+      }),
+      _vm._v(" "),
+      _c("div", { attrs: { id: "countdownTimer" } }, [
+        _c("div", { attrs: { id: "countdown" } }, [
+          _c("div", { attrs: { id: "countdown-text" } }, [
+            _c("span", { attrs: { id: "countdown-time" } }, [
+              _vm._v(_vm._s(_vm.countDown)),
+            ]),
+            _vm._v(" "),
+            _c("span", { attrs: { id: "countdown-text-label" } }, [
+              _vm._v("seconds"),
+            ]),
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "countdown-button",
+              attrs: { id: "countdown" },
+              on: {
+                click: function ($event) {
+                  return _vm.countDownTimer()
+                },
+              },
+            },
+            [_vm._v("Start")]
+          ),
+        ]),
+      ]),
+    ],
+    2
   )
 }
 var staticRenderFns = []
