@@ -30,25 +30,25 @@ export default {
             //     console.log(e);
             //     this.$router.push('/game/'+e.game.id);
             // });
-            window.Echo.join('lobby.'+this.$route.params.id).here((users) => {
+            var channel = window.Echo.join('lobby.'+this.$route.params.id);
+            channel.here((users) => {
                 // console.log(users);
                 // this.players = users;
-            }).joining((user) => {
+                users.forEach(user => {
+                    this.players.push(user);
+                });
+            });
+            channel.joining((user) => {
                 console.log(user);
                 this.players.push(user);
-            }).leaving((user) => {
+            });
+            channel.leaving((user) => {
                 console.log(user);
                 this.players.splice(this.players.indexOf(user), 1);
-            }).error((err) => {
+            });
+            channel.error((err) => {
                 console.log(err);
             });
-        axios.get('/api/lobby/users/'+this.$route.params.id).then(response => {
-            console.log(response.data)
-            for (let i = 0; i < response.data.length; i++) {
-                this.players.push(response.data[i].user)
-            }
-            console.log(this.players)
-        });
         
     },
     methods: {

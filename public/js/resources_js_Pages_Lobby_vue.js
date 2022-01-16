@@ -47,27 +47,26 @@ __webpack_require__.r(__webpack_exports__);
     //     console.log(e);
     //     this.$router.push('/game/'+e.game.id);
     // });
-    window.Echo.join('lobby.' + this.$route.params.id).here(function (users) {// console.log(users);
+    var channel = window.Echo.join('lobby.' + this.$route.params.id);
+    channel.here(function (users) {
+      // console.log(users);
       // this.players = users;
-    }).joining(function (user) {
+      users.forEach(function (user) {
+        _this.players.push(user);
+      });
+    });
+    channel.joining(function (user) {
       console.log(user);
 
       _this.players.push(user);
-    }).leaving(function (user) {
+    });
+    channel.leaving(function (user) {
       console.log(user);
 
       _this.players.splice(_this.players.indexOf(user), 1);
-    }).error(function (err) {
-      console.log(err);
     });
-    axios.get('/api/lobby/users/' + this.$route.params.id).then(function (response) {
-      console.log(response.data);
-
-      for (var i = 0; i < response.data.length; i++) {
-        _this.players.push(response.data[i].user);
-      }
-
-      console.log(_this.players);
+    channel.error(function (err) {
+      console.log(err);
     });
   },
   methods: {},
