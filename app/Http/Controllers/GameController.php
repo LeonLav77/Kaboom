@@ -14,15 +14,17 @@ class GameController extends Controller
     public function joinLobby(request $request){
         // if there is a empty lobby, join that one
         // if there is no empty lobby create a new one
+        $user = Auth::user();
         $lobby = Lobby::where('status', 'waiting')->first();
         if(!$lobby){
             $lobby = new Lobby();
             $lobby->number_of_players = $request->number_of_players ?? 2;
+            $lobby->user_id = $user->id;
             $lobby->status = 'waiting';
             $lobby->save();
         }
-        LobbiesUsers::where('user_id',Auth::user()->id)->delete();
-        LobbiesUsers::addUser($lobby->id,Auth::user()->id);
+        LobbiesUsers::where('user_id',$user->id)->delete();
+        LobbiesUsers::addUser($lobby->id,$user->id);
         broadcast(new UserJoinedLobby($lobby->id))->toOthers();
         if($lobby->number_of_players == $lobby->players()->count()){
             $lobby->status = 'full';
@@ -30,10 +32,15 @@ class GameController extends Controller
         }
         return response()->json($lobby);
     }
-    public function getLobbyUsers($id){
+    public function getLobbyInfo($id){
         $lobby = Lobby::find($id);
         $users = LobbiesUsers::getUsers($lobby->id)->load('user');
-        return response()->json($users);
+        $lobby->players = $users;
+        return response()->json($lobby);
+    }
+    public function userInfo(){
+        $user = Auth::user();
+        return response()->json($user);
     }
     // game logic:
     // game starts with x number of players

@@ -17,7 +17,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -26,39 +25,48 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      players: []
+      players: [],
+      number_of_players: 0,
+      me: null,
+      owner: null
     };
   },
   mounted: function mounted() {
     var _this = this;
 
-    // window.Echo.channel('lobby'+this.$route.params.id)
-    //     .listen('UserJoinedLobby', (e) => {
-    //     console.log(e.user);
-    //     this.players.push(e.user);
-    // });
-    // window.Echo.channel('lobby'+this.$route.params.id)
-    //     .listen('UserLeavingLobby', (e) => {
-    //     console.log(e);
-    //     // this.players.push(e.user);
-    // });
-    // window.Echo.private('lobby'+this.$route.params.id)
-    //     .listen('UserJoinedLobby', (e) => {
-    //     console.log(e);
-    //     this.$router.push('/game/'+e.game.id);
-    // });
+    axios.post('/api/lobbyInfo/' + this.$route.params.id).then(function (response) {
+      // console.log(response.data);
+      _this.owner = response.data.user; // console.log(this.owner);
+
+      _this.number_of_players = response.data.number_of_players;
+    });
+    axios.post('/api/userInfo').then(function (response) {
+      _this.me = response.data;
+    });
     var channel = window.Echo.join('lobby.' + this.$route.params.id);
     channel.here(function (users) {
-      // console.log(users);
-      // this.players = users;
       users.forEach(function (user) {
         _this.players.push(user);
       });
+      console.log(_this.me); // if you are the owner of the lobby put owner true
+
+      if (_this.me.id == _this.owner.id) {
+        _this.owner = true;
+        alert('You are the owner of this lobby');
+      }
+
+      console.log(_this.owner);
     });
     channel.joining(function (user) {
       console.log(user);
 
-      _this.players.push(user);
+      _this.players.push(user); // $('#player-icon-'+user.id).addClass('animated bounceIn');
+
+
+      var no_of_players = _this.players.length;
+
+      if (no_of_players == _this.number_of_players && _this.owner == true) {} // check if lobby is full, if yes start count down
+
     });
     channel.leaving(function (user) {
       console.log(user);
@@ -74,6 +82,8 @@ __webpack_require__.r(__webpack_exports__);
     var answer = window.confirm('Do you want to leave the lobby?');
 
     if (answer) {
+      window.Echo.leave('lobby.' + this.$route.params.id);
+      window.Echo.disconnect();
       next();
     } else {
       next(false);

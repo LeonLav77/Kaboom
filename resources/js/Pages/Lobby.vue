@@ -1,46 +1,56 @@
 <template>
     <div class="wrapper">
         <PlayerIcon v-for="(player, index) in players" :player="player" :key="index" />
-
     </div>
 </template>
 
 <script>
 export default {
     components: {
-        PlayerIcon: () => import('../Components/PlayerIcon.vue')
+        PlayerIcon: () => import('../Components/PlayerIcon.vue'),
     },
     data: () => ({
         players: [],
-
+        number_of_players: 0,
+        me: null,
+        owner: null
     }),
     mounted() {
-            // window.Echo.channel('lobby'+this.$route.params.id)
-            //     .listen('UserJoinedLobby', (e) => {
-            //     console.log(e.user);
-            //     this.players.push(e.user);
-            // });
-            // window.Echo.channel('lobby'+this.$route.params.id)
-            //     .listen('UserLeavingLobby', (e) => {
-            //     console.log(e);
-            //     // this.players.push(e.user);
-            // });
-            // window.Echo.private('lobby'+this.$route.params.id)
-            //     .listen('UserJoinedLobby', (e) => {
-            //     console.log(e);
-            //     this.$router.push('/game/'+e.game.id);
-            // });
+            axios.post('/api/lobbyInfo/'+this.$route.params.id)
+                .then(response => {
+                    // console.log(response.data);
+                    this.owner = response.data.user;
+                    // console.log(this.owner);
+                    this.number_of_players = response.data.number_of_players;
+                });
+            axios.post('/api/userInfo')
+                .then(response => {
+                    this.me = response.data;
+                });
             var channel = window.Echo.join('lobby.'+this.$route.params.id);
             channel.here((users) => {
-                // console.log(users);
-                // this.players = users;
                 users.forEach(user => {
                     this.players.push(user);
                 });
+                console.log(this.me);
+                // if you are the owner of the lobby put owner true
+                if(this.me.id == this.owner.id) {
+                    this.owner = true;
+                    alert('You are the owner of this lobby');
+                }
+                console.log(this.owner)
             });
             channel.joining((user) => {
                 console.log(user);
                 this.players.push(user);
+                // $('#player-icon-'+user.id).addClass('animated bounceIn');
+                let no_of_players = this.players.length;
+                if(no_of_players == this.number_of_players && this.owner == true) {
+
+                }
+                // check if lobby is full, if yes start count down
+
+                
             });
             channel.leaving((user) => {
                 console.log(user);
@@ -57,6 +67,8 @@ export default {
     beforeRouteLeave (to, from , next) {
         const answer = window.confirm('Do you want to leave the lobby?');
         if (answer) {
+            window.Echo.leave('lobby.'+this.$route.params.id);
+            window.Echo.disconnect();
             next()
         } else {
             next(false)

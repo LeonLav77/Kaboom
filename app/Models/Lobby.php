@@ -9,6 +9,7 @@ class Lobby extends Model
 {
     use HasFactory;
     public $guarded = [];
+    public $with = ['user'];
     // a Lobby has:
     // creator
     // number of players
@@ -17,5 +18,9 @@ class Lobby extends Model
     public function players()
     {
         return $this->hasMany(LobbiesUsers::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
