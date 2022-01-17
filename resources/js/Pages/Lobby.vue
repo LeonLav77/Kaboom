@@ -26,51 +26,63 @@ export default {
         countDown : 10
     }),
     mounted() {
-            axios.post('/api/lobbyInfo/'+this.$route.params.id)
-                .then(response => {
-                    // console.log(response.data);
-                    this.owner = response.data.user;
-                    // console.log(this.owner);
-                    this.number_of_players = response.data.number_of_players;
-                });
-            axios.post('/api/userInfo')
-                .then(response => {
-                    this.me = response.data;
-                });
-            var channel = window.Echo.join('lobby.'+this.$route.params.id);
-            channel.here((users) => {
-                users.forEach(user => {
-                    this.players.push(user);
-                });
-                console.log(this.me);
-                // if you are the owner of the lobby put owner true
-                if(this.me.id == this.owner.id) {
-                    this.owner = true;
-                    alert('You are the owner of this lobby');
-                }
-                console.log(this.owner)
+        window.Echo.leave();
+        axios.post('/api/lobbyInfo/'+this.$route.params.id)
+            .then(response => {
+                // console.log(response.data);
+                this.owner = response.data.user;
+                // console.log(this.owner);
+                this.number_of_players = response.data.number_of_players;
             });
-            channel.joining((user) => {
-                console.log(user);
+        axios.post('/api/userInfo')
+            .then(response => {
+                this.me = response.data;
+            });
+        var channel = window.Echo.join('lobby.'+this.$route.params.id);
+        channel.here((users) => {
+            users.forEach(user => {
                 this.players.push(user);
-                // $('#player-icon-'+user.id).addClass('animated bounceIn');
-                let no_of_players = this.players.length;
-                if(no_of_players == this.number_of_players && this.owner == true) {
-                    this.countDownTimer();
-                }
-                // check if lobby is full, if yes start count down
-
-                
             });
-            channel.leaving((user) => {
-                console.log(user);
-                this.players.splice(this.players.indexOf(user), 1);
-            });
-            channel.error((err) => {
-                console.log(err);
-            });
-        
-    },
+            console.log(this.me);
+            // if you are the owner of the lobby put owner true
+            if(this.me.id == this.owner.id) {
+                this.owner = true;
+                // alert('You are the owner of this lobby');
+            }
+            console.log(this.owner)
+        });
+        channel.joining((user) => {
+            console.log(user);
+            this.players.push(user);
+            // $('#player-icon-'+user.id).addClass('animated bounceIn');
+            let no_of_players = this.players.length;
+            if(no_of_players == this.number_of_players && this.owner == true) {
+                axios.post('/api/startCountdown', {
+                    lobby_id: this.$route.params.id
+                    })
+                    .then(response => {
+                        console.log(response.data);
+                    });
+            }
+            // check if lobby is full, if yes start count down
+        });
+        channel.leaving((user) => {
+            console.log(user);
+            this.players.splice(this.players.indexOf(user), 1);
+        });
+        channel.error((err) => {
+            console.log(err);
+        });
+        window.Echo.channel('countdown.'+this.$route.params.id)
+            .listen('StartCountdown', (data) => {
+                console.log(data);
+                this.countDownTimer() 
+        });
+        // window.Echo.listen('GameStarted', (e) => {
+        //     console.log(e);
+        //     this.$router.push('/game/'+e.lobby_id);
+        // });
+},
     methods: {
         countDownTimer() {
                 if(this.countDown > 0) {

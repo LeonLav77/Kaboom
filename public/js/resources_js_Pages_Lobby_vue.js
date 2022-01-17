@@ -44,6 +44,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
+    window.Echo.leave();
     axios.post('/api/lobbyInfo/' + this.$route.params.id).then(function (response) {
       // console.log(response.data);
       _this.owner = response.data.user; // console.log(this.owner);
@@ -61,8 +62,7 @@ __webpack_require__.r(__webpack_exports__);
       console.log(_this.me); // if you are the owner of the lobby put owner true
 
       if (_this.me.id == _this.owner.id) {
-        _this.owner = true;
-        alert('You are the owner of this lobby');
+        _this.owner = true; // alert('You are the owner of this lobby');
       }
 
       console.log(_this.owner);
@@ -76,7 +76,11 @@ __webpack_require__.r(__webpack_exports__);
       var no_of_players = _this.players.length;
 
       if (no_of_players == _this.number_of_players && _this.owner == true) {
-        _this.countDownTimer();
+        axios.post('/api/startCountdown', {
+          lobby_id: _this.$route.params.id
+        }).then(function (response) {
+          console.log(response.data);
+        });
       } // check if lobby is full, if yes start count down
 
     });
@@ -88,6 +92,14 @@ __webpack_require__.r(__webpack_exports__);
     channel.error(function (err) {
       console.log(err);
     });
+    window.Echo.channel('countdown.' + this.$route.params.id).listen('StartCountdown', function (data) {
+      console.log(data);
+
+      _this.countDownTimer();
+    }); // window.Echo.listen('GameStarted', (e) => {
+    //     console.log(e);
+    //     this.$router.push('/game/'+e.lobby_id);
+    // });
   },
   methods: {
     countDownTimer: function countDownTimer() {

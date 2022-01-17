@@ -23,7 +23,9 @@ export default {
     }),
   },
   mounted() {
-    window.Echo.channel('channel')
+    // disconnect from all channels
+      window.Echo.leave();
+      window.Echo.channel('channel')
       .listen('Hello', (e) => {
         console.log(e);
       });

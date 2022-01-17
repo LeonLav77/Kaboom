@@ -41,6 +41,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   })),
   mounted: function mounted() {
+    // disconnect from all channels
+    window.Echo.leave();
     window.Echo.channel('channel').listen('Hello', function (e) {
       console.log(e);
     });

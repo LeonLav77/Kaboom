@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Models\Lobby;
 use App\Models\LobbiesUsers;
 use Illuminate\Http\Request;
+use App\Events\StartCountdown;
 use App\Events\UserJoinedLobby;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,6 +42,10 @@ class GameController extends Controller
     public function userInfo(){
         $user = Auth::user();
         return response()->json($user);
+    }
+    public function startCountdown(Request $request){
+        broadcast(new StartCountdown($request->lobby_id));
+        return response()->json(['message'=>'Countdown started']);
     }
     // game logic:
     // game starts with x number of players
