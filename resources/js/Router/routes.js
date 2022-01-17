@@ -14,6 +14,11 @@ const routes = [
     component: () => import('../Pages/Lobby.vue'),
     name: 'Lobby'
   },
+  {
+    path: '/game/:id',
+    component: () => import('../Pages/Game.vue'),
+    name: 'Game'
+  },
 ]
 
 export default routes;

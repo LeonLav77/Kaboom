@@ -11,10 +11,10 @@ class Lobby extends Model
     public $guarded = [];
     public $with = ['user'];
     // a Lobby has:
-    // creator
-    // number of players
+    // creator .
+    // number of players .
     // rules gonna skip for now
-    // players
+    // players .
     public function players()
     {
         return $this->hasMany(LobbiesUsers::class);

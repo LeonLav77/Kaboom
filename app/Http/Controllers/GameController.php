@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use App\Models\Lobby;
+use App\Events\StartGame;
 use App\Models\LobbiesUsers;
 use Illuminate\Http\Request;
 use App\Events\StartCountdown;
@@ -46,6 +47,10 @@ class GameController extends Controller
     public function startCountdown(Request $request){
         broadcast(new StartCountdown($request->lobby_id));
         return response()->json(['message'=>'Countdown started']);
+    }
+    public function startGame(Request $request){
+        broadcast(new StartGame($request->lobby_id));
+        return response()->json(['message'=>'Game started']);
     }
     // game logic:
     // game starts with x number of players

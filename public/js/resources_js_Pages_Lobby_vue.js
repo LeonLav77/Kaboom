@@ -46,9 +46,7 @@ __webpack_require__.r(__webpack_exports__);
 
     window.Echo.leave();
     axios.post('/api/lobbyInfo/' + this.$route.params.id).then(function (response) {
-      // console.log(response.data);
-      _this.owner = response.data.user; // console.log(this.owner);
-
+      _this.owner = response.data.user;
       _this.number_of_players = response.data.number_of_players;
     });
     axios.post('/api/userInfo').then(function (response) {
@@ -64,12 +62,8 @@ __webpack_require__.r(__webpack_exports__);
       if (_this.me.id == _this.owner.id) {
         _this.owner = true; // alert('You are the owner of this lobby');
       }
-
-      console.log(_this.owner);
     });
     channel.joining(function (user) {
-      console.log(user);
-
       _this.players.push(user); // $('#player-icon-'+user.id).addClass('animated bounceIn');
 
 
@@ -85,21 +79,17 @@ __webpack_require__.r(__webpack_exports__);
 
     });
     channel.leaving(function (user) {
-      console.log(user);
-
       _this.players.splice(_this.players.indexOf(user), 1);
     });
     channel.error(function (err) {
       console.log(err);
     });
-    window.Echo.channel('countdown.' + this.$route.params.id).listen('StartCountdown', function (data) {
-      console.log(data);
-
+    channel.listen('StartCountdown', function (data) {
       _this.countDownTimer();
-    }); // window.Echo.listen('GameStarted', (e) => {
-    //     console.log(e);
-    //     this.$router.push('/game/'+e.lobby_id);
-    // });
+    });
+    channel.listen('StartGame', function (data) {
+      _this.$router.push('/game/' + _this.$route.params.id);
+    }); // SHOULD PROBABLY REGISTER ALL EVENTS UNDER SAME CHANNEL
   },
   methods: {
     countDownTimer: function countDownTimer() {
@@ -111,15 +101,28 @@ __webpack_require__.r(__webpack_exports__);
 
           _this2.countDownTimer();
         }, 1000);
+      } else {
+        // if you are the leader you should start
+        if (this.owner == true) {
+          axios.post('/api/startGame', {
+            lobby_id: this.$route.params.id
+          }).then(function (response) {
+            console.log(response.data);
+          });
+        }
       }
     }
   },
   beforeRouteLeave: function beforeRouteLeave(to, from, next) {
+    // if going to the game then next()
+    if (to.path == '/game/') {
+      next();
+    }
+
     var answer = window.confirm('Do you want to leave the lobby?');
 
     if (answer) {
-      window.Echo.leave('lobby.' + this.$route.params.id);
-      window.Echo.disconnect();
+      window.Echo.leave();
       next();
     } else {
       next(false);

@@ -37,6 +37,6 @@ class StartCountdown implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('countdown.'.$this->lobby_id);
+        return new PresenceChannel('lobby.'.$this->lobby_id);
     }
 }

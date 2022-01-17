@@ -31,6 +31,7 @@ Route::post('/userInfo',[GameController::class,'userInfo']);
 
 Route::post('/startCountdown',[GameController::class,'startCountdown']);
 
+Route::post('/startGame',[GameController::class,'startGame']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
