@@ -99,7 +99,8 @@ export default {
     },  
     beforeRouteLeave (to, from , next) {
         // if going to the game then next()
-        if(to.path == '/game/') {
+        // THIS IS JUST TEMPORARY IT NEED TO BE GAME ANY NUMBER
+        if(to.path == '/game/'+this.$route.params.id) {
             next();
         }
         const answer = window.confirm('Do you want to leave the lobby?');

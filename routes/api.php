@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\LobbyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,19 +20,21 @@ Route::post('/new-entry',[TestController::class,'store']);
 
 Route::get('/users',[TestController::class,'index']);
 
-route::get('game/players',[GameController::class,'players']);
+route::get('game/players',[LobbyController::class,'players']);
 
-Route::post('/lobby/join',[GameController::class,'joinLobby']);
+Route::post('/lobby/join',[LobbyController::class,'joinLobby']);
 
-Route::get('/lobby/users/{id}',[GameController::class,'getLobbyUsers']);
+Route::get('/lobby/users/{id}',[LobbyController::class,'getLobbyUsers']);
 
-Route::post('/lobbyInfo/{id}',[GameController::class,'getLobbyInfo']);
+Route::post('/lobbyInfo/{id}',[LobbyController::class,'getLobbyInfo']);
 
-Route::post('/userInfo',[GameController::class,'userInfo']);
+Route::post('/userInfo',[LobbyController::class,'userInfo']);
 
-Route::post('/startCountdown',[GameController::class,'startCountdown']);
+Route::post('/startCountdown',[LobbyController::class,'startCountdown']);
 
-Route::post('/startGame',[GameController::class,'startGame']);
+Route::post('/startGame',[LobbyController::class,'startGame']);
+
+Route::get('/makeDeck',[GameController::class,'test']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
