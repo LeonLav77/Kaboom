@@ -36,6 +36,12 @@ Route::post('/startGame',[LobbyController::class,'startGame']);
 
 Route::get('/makeDeck',[GameController::class,'test']);
 
+Route::post('/makeDeck',[GameController::class,'makeDeck']);
+
+Route::post('makeMove',[GameController::class,'makeMove']);
+
+Route::post('dealCards',[GameController::class,'getCards']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

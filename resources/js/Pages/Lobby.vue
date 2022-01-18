@@ -23,7 +23,7 @@ export default {
         number_of_players: 0,
         me: null,
         owner: null,
-        countDown : 10
+        countDown : 2
     }),
     mounted() {
         window.Echo.leave();
@@ -73,9 +73,8 @@ export default {
             this.countDownTimer() 
         });
         channel.listen('StartGame', (data) => {
-            this.$router.push('/game/'+this.$route.params.id);
+            this.$router.push('/game/'+data.game_id);
         });
-        // SHOULD PROBABLY REGISTER ALL EVENTS UNDER SAME CHANNEL
 },
     methods: {
         countDownTimer() {
@@ -97,21 +96,21 @@ export default {
                 }
         },
     },  
-    beforeRouteLeave (to, from , next) {
-        // if going to the game then next()
-        // THIS IS JUST TEMPORARY IT NEED TO BE GAME ANY NUMBER
-        if(to.path == '/game/'+this.$route.params.id) {
-            next();
-        }
-        const answer = window.confirm('Do you want to leave the lobby?');
-        if (answer) {
-            window.Echo.leave();
-            next()
-        } else {
-            next(false)
-        }
+    // beforeRouteLeave (to, from , next) {
+    //     // if going to the game then next()
+    //     // THIS IS JUST TEMPORARY IT NEED TO BE GAME ANY NUMBER
+    //     if(to.path == '/game/'+this.$route.params.id) {
+    //         next();
+    //     }
+    //     const answer = window.confirm('Do you want to leave the lobby?');
+    //     if (answer) {
+    //         window.Echo.leave();
+    //         next()
+    //     } else {
+    //         next(false)
+    //     }
         
-    },        
+    // },        
 
 }
 </script>

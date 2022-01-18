@@ -5,6 +5,7 @@ namespace App\Events;
 use App\Models\Game;
 use App\Models\Lobby;
 use App\Models\GameUsers;
+use App\CustomClasses\Deck;
 use App\Models\LobbiesUsers;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -24,6 +25,7 @@ class StartGame implements ShouldBroadcast
      * @return void
      */
     public $lobby_id;
+    public $game_id;
     public function __construct($lobby_id)
     {
         $this->lobby_id = $lobby_id;
@@ -32,6 +34,7 @@ class StartGame implements ShouldBroadcast
         // have to be the same as game id
         $game = new Game();
         $game->save();
+        $this->game_id = $game->id;
         // transfering players from lobby to the game
         // get lobby users
         $lobbyUsersIds = Lobby::where('id',$lobby_id)->first()->players->pluck('user_id');
@@ -41,11 +44,15 @@ class StartGame implements ShouldBroadcast
         foreach($lobbyUsersIds as $userId){
             GameUsers::addUser($game->id,$userId);
         }
-
+        // create a deck and assign it to the game id
+        $deck = new Deck($game->id);
+        $deck->shuffle();
+        $deck->save();
     }
     public function broadcastWith(){
         return [
             'lobby_id' => $this->lobby_id,
+            'game_id' => $this->game_id,
         ];
     }
     /**

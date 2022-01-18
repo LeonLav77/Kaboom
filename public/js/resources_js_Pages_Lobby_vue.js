@@ -38,7 +38,7 @@ __webpack_require__.r(__webpack_exports__);
       number_of_players: 0,
       me: null,
       owner: null,
-      countDown: 10
+      countDown: 2
     };
   },
   mounted: function mounted() {
@@ -88,8 +88,8 @@ __webpack_require__.r(__webpack_exports__);
       _this.countDownTimer();
     });
     channel.listen('StartGame', function (data) {
-      _this.$router.push('/game/' + _this.$route.params.id);
-    }); // SHOULD PROBABLY REGISTER ALL EVENTS UNDER SAME CHANNEL
+      _this.$router.push('/game/' + data.game_id);
+    });
   },
   methods: {
     countDownTimer: function countDownTimer() {
@@ -112,23 +112,21 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     }
-  },
-  beforeRouteLeave: function beforeRouteLeave(to, from, next) {
-    // if going to the game then next()
-    // THIS IS JUST TEMPORARY IT NEED TO BE GAME ANY NUMBER
-    if (to.path == '/game/' + this.$route.params.id) {
-      next();
-    }
+  } // beforeRouteLeave (to, from , next) {
+  //     // if going to the game then next()
+  //     // THIS IS JUST TEMPORARY IT NEED TO BE GAME ANY NUMBER
+  //     if(to.path == '/game/'+this.$route.params.id) {
+  //         next();
+  //     }
+  //     const answer = window.confirm('Do you want to leave the lobby?');
+  //     if (answer) {
+  //         window.Echo.leave();
+  //         next()
+  //     } else {
+  //         next(false)
+  //     }
+  // },        
 
-    var answer = window.confirm('Do you want to leave the lobby?');
-
-    if (answer) {
-      window.Echo.leave();
-      next();
-    } else {
-      next(false);
-    }
-  }
 });
 
 /***/ }),
