@@ -10,7 +10,7 @@ use App\CustomClasses\CardTypes\BoyQueen;
 use App\CustomClasses\CardTypes\BlackKing;
 use App\CustomClasses\CardTypes\SevenEight;
 
-class Deck {
+class DeckTu {
     public $deck = [];
     public $game_id = null;
     public function __construct($game_id){
@@ -75,15 +75,7 @@ class Deck {
         return null;
     }
     public function draw(){
-        $card = array_pop($this->deck);
-        return $card;
-    }
-    public function drawN($n){
-        $cards = [];
-        for($i=0;$i<$n;$i++){
-            $cards[] = array_pop($this->deck);
-        }
-        return $cards;
+        return "yea";
     }
 
 }

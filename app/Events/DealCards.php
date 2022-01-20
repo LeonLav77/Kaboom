@@ -23,15 +23,20 @@ class DealCards implements ShouldBroadcast
     public $game_id;
     public $deck;
     public $user_id;
-    public function __construct($game_id)
+    public $hand;
+    public function __construct($game_id,$user_id)
     {
         $this->game_id = $game_id;
-        $this->user_id = 1;
+        $this->user_id = $user_id;
         $this->deck = Deck::getDeck($this->game_id);
+        $this->hand = $this->deck->drawN(4);
+        $this->deck->save();
+        // $this->hand = $this->deck->draw();
     }
     public function broadcastWith(){
         return [
             'deck' => $this->deck,
+            'hand' => $this->hand,
         ];
     }
     /**

@@ -21,9 +21,19 @@ export default {
         me: null,
     }),
     mounted() {
+      axios.post('/api/userInfo')
+        .then(response => {
+          this.me = response.data;
+            console.log(this.me);
+            var gameUserChannel = window.Echo.private('game.'+this.$route.params.id+'_user.'+this.me.id);
+            // 'game.' . $this->game_id . '_user.' . $this->user_id
+            gameUserChannel.listen('DealCards', (e) => {
+              console.log(e);
+            });
       window.Echo.leave();
         var mainchannel = window.Echo.join('game.'+this.$route.params.id);
         mainchannel.here((users) => {
+          this.dealCards();
           users.forEach(user => {
             this.players.push(user);
             });
@@ -43,23 +53,8 @@ export default {
           console.log(e);
         });
         // subscribe to game.{game_id}_user.{$user_id} channel
-        var gameUserChannel = window.Echo.channel('user.'+this.$route.params.id+'.'+"1");
-        gameUserChannel.listen('DealCards', (e) => {
-          console.log(e);
+
         });
-      // axios.post('/api/userInfo')
-      //   .then(response => {
-      //     this.me = response.data;
-      //       console.log(this.me);
-      //     window.Echo.private('game.'+this.$route.params.id+"_user."+this.me.id)
-      //       .listen('MakeDeck', (e) => {
-      //           console.log(e);
-      //       });
-      //       window.Echo.private('game.'+this.$route.params.id+"_user."+this.me.id)
-      //       .listen('DealCards', (e) => {
-      //           console.log(e);
-      //       });
-      //   });
 },
 methods: {
   makeMove(){

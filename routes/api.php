@@ -40,7 +40,7 @@ Route::post('/makeDeck',[GameController::class,'makeDeck']);
 
 Route::post('makeMove',[GameController::class,'makeMove']);
 
-Route::post('dealCards',[GameController::class,'getCards']);
+Route::post('dealCards',[GameController::class,'dealCards']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -39,44 +39,38 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    window.Echo.leave();
-    var mainchannel = window.Echo.join('game.' + this.$route.params.id);
-    mainchannel.here(function (users) {
-      users.forEach(function (user) {
+    axios.post('/api/userInfo').then(function (response) {
+      _this.me = response.data;
+      console.log(_this.me);
+      var gameUserChannel = window.Echo["private"]('game.' + _this.$route.params.id + '_user.' + _this.me.id); // 'game.' . $this->game_id . '_user.' . $this->user_id
+
+      gameUserChannel.listen('DealCards', function (e) {
+        console.log(e);
+      });
+      window.Echo.leave();
+      var mainchannel = window.Echo.join('game.' + _this.$route.params.id);
+      mainchannel.here(function (users) {
+        _this.dealCards();
+
+        users.forEach(function (user) {
+          _this.players.push(user);
+        });
+      });
+      mainchannel.joining(function (user) {
         _this.players.push(user);
       });
-    });
-    mainchannel.joining(function (user) {
-      _this.players.push(user);
-    });
-    mainchannel.leaving(function (user) {
-      _this.players.splice(_this.players.indexOf(user), 1);
-    });
-    mainchannel.error(function (err) {
-      console.log(err);
-    }); // subscribe to gameMoves channel
+      mainchannel.leaving(function (user) {
+        _this.players.splice(_this.players.indexOf(user), 1);
+      });
+      mainchannel.error(function (err) {
+        console.log(err);
+      }); // subscribe to gameMoves channel
 
-    var gameMovesChannel = window.Echo.channel('moves.' + this.$route.params.id);
-    gameMovesChannel.listen('Move', function (e) {
-      console.log(e);
-    }); // subscribe to game.{game_id}_user.{$user_id} channel
-
-    var gameUserChannel = window.Echo.channel('user.' + this.$route.params.id + '.' + "1");
-    gameUserChannel.listen('DealCards', function (e) {
-      console.log(e);
-    }); // axios.post('/api/userInfo')
-    //   .then(response => {
-    //     this.me = response.data;
-    //       console.log(this.me);
-    //     window.Echo.private('game.'+this.$route.params.id+"_user."+this.me.id)
-    //       .listen('MakeDeck', (e) => {
-    //           console.log(e);
-    //       });
-    //       window.Echo.private('game.'+this.$route.params.id+"_user."+this.me.id)
-    //       .listen('DealCards', (e) => {
-    //           console.log(e);
-    //       });
-    //   });
+      var gameMovesChannel = window.Echo.channel('moves.' + _this.$route.params.id);
+      gameMovesChannel.listen('Move', function (e) {
+        console.log(e);
+      }); // subscribe to game.{game_id}_user.{$user_id} channel
+    });
   },
   methods: {
     makeMove: function makeMove() {

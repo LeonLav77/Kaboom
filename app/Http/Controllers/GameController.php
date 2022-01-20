@@ -7,6 +7,7 @@ use App\Events\MakeDeck;
 use App\Events\DealCards;
 use App\CustomClasses\Deck;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Broadcasting\BroadcastEvent;
 
@@ -24,7 +25,8 @@ class GameController extends Controller
     public function makeMove(Request $request){
         broadcast(new Move($request->game_id));
     }
-    public function getCards(Request $request){
-        broadcast(new DealCards($request->game_id));
+    public function dealCards(Request $request){
+        $user_id = Auth::user()->id;
+        broadcast(new DealCards($request->game_id,$user_id));
     }
 }

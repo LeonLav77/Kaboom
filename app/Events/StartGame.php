@@ -7,6 +7,7 @@ use App\Models\Lobby;
 use App\Models\GameUsers;
 use App\CustomClasses\Deck;
 use App\Models\LobbiesUsers;
+use App\CustomClasses\DeckTu;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
