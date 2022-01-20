@@ -16,34 +16,38 @@ class Deck {
     public function __construct($game_id){
         $this->game_id = $game_id;
         $deck = [];
-        $suits = ['Heart','Diamond','Spade','Club'];
+        $suits = ['heart','diamond','spade','club'];
         foreach($suits as $suit){
             for($i=1;$i<=14;$i++){
+                $name = "/storage/Cards/".$i. "_of_".$suit."s.png";
                 if($i % 2 == 0){
-                    $color = "Red";
+                    $color = "red";
                 }else{
-                    $color = "Black";
+                    $color = "black";
                 }
                 if ($i == 7 || $i == 8) {
-                    $deck[] = new SevenEight($i, $suit, $i, $color);
+                    $deck[] = new SevenEight($i, $suit, $i, $color, $name);
                 }
                 elseif ($i == 9 || $i == 10) {
-                    $deck[] = new NineTen($i, $suit, $i, $color);
+                    $deck[] = new NineTen($i, $suit, $i, $color, $name);
                 }
                 elseif ($i == 11 || $i == 12) {
-                    $deck[] = new BoyQueen($i, $suit, $i, $color);
+                    $deck[] = new BoyQueen($i, $suit, $i, $color, $name);
                 }
                 elseif ($i == 14) {
-                    $deck[] = new Joker(0, "Joker", $i, $color);
+                    $name = "/storage/Cards/".$color."_joker.png";
+                    $deck[] = new Joker(0, "Joker", $i, $color, $name);
                 }
-                elseif ($i == 13 && $color == "Black") {
-                    $deck[] = new BlackKing($i, $suit, $i, $color);
+                elseif ($i == 13 && $color == "black") {
+                    $name = "/storage/Cards/".$color."_king.png";
+                    $deck[] = new BlackKing($i, $suit, $i, $color, $name);
                 }
-                elseif ($i == 13 && $color == "Red") {
-                    $deck[] = new RedKing($i, $suit, $i, $color);
+                elseif ($i == 13 && $color == "red") {
+                    $name = "/storage/Cards/".$color."_king.png";
+                    $deck[] = new RedKing($i, $suit, $i, $color, $name);
                 }
                 else{
-                    $deck[] = new Basic($i, $suit, $i, $color);
+                    $deck[] = new Basic($i, $suit, $i, $color, $name);
                 }
             }
         }

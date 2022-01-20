@@ -14,13 +14,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/b', function () {
-    broadcast(new Hello());
-});
-
-Route::get('/u', function () {
-    broadcast(new UserJoinedLobby(69));
-});
 Route::get('/{path?}', function () {
     return view('welcome');
 })->where('path', '.*')->name('login');
