@@ -29,4 +29,12 @@ class GameController extends Controller
         $user_id = Auth::user()->id;
         broadcast(new DealCards($request->game_id,$user_id));
     }
+    public function revealCard(Request $request){
+        $user_id = Auth::user()->id;
+        $game_id = $request->game_id;
+        $card_id = $request->card_id;
+        $deck = Deck::getDeck($game_id);
+        $card = $deck->revealCard($user_id,$card_id);
+        return json_encode($card);
+    }
 }

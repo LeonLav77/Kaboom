@@ -23,17 +23,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
       return __webpack_require__.e(/*! import() */ "resources_js_Components_PlayerIcon_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Components/PlayerIcon.vue */ "./resources/js/Components/PlayerIcon.vue"));
+    },
+    Card: function Card() {
+      return __webpack_require__.e(/*! import() */ "resources_js_Components_Card_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Components/Card.vue */ "./resources/js/Components/Card.vue"));
     }
   },
   data: function data() {
     return {
       players: [],
       number_of_players: 0,
-      me: null
+      me: null,
+      hand: []
     };
   },
   mounted: function mounted() {
@@ -42,10 +47,10 @@ __webpack_require__.r(__webpack_exports__);
     axios.post('/api/userInfo').then(function (response) {
       _this.me = response.data;
       console.log(_this.me);
-      var gameUserChannel = window.Echo["private"]('game.' + _this.$route.params.id + '_user.' + _this.me.id); // 'game.' . $this->game_id . '_user.' . $this->user_id
-
+      var gameUserChannel = window.Echo["private"]('game.' + _this.$route.params.id + '_user.' + _this.me.id);
       gameUserChannel.listen('DealCards', function (e) {
-        console.log(e);
+        console.log(e.hand);
+        _this.hand = e.hand;
       });
       window.Echo.leave();
       var mainchannel = window.Echo.join('game.' + _this.$route.params.id);
@@ -108,7 +113,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.wrapper[data-v-1deb7a1b] {\n    margin: 20px auto;\n      width:400px;\n      height:400px;\n      display:grid;\n      grid-template-columns: 200px 200px;\n      grid-row: auto auto;\n      grid-column-gap: 20px;\n      grid-row-gap: 20px;\n}\n.playerIcon[data-v-1deb7a1b] {\n      background-color:#333;\n      padding:20px;\n      border-radius:10px;\n      color:#fff;\n      display:flex;\n      align-items:center;\n      justify-content:center;\n      font-size:40px;\n      font-family:sans-serif;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.wrapper[data-v-1deb7a1b] {\n    margin: 20px auto;\n      width:400px;\n      height:400px;\n      display:grid;\n      grid-template-columns: 200px 200px;\n      grid-row: auto auto;\n      grid-column-gap: 20px;\n      grid-row-gap: 20px;\n}\n.playerIcon[data-v-1deb7a1b] {\n      background-color:#333;\n      padding:20px;\n      border-radius:10px;\n      color:#fff;\n      display:flex;\n      align-items:center;\n      justify-content:center;\n      font-size:40px;\n      font-family:sans-serif;\n}\n.wrapper2[data-v-1deb7a1b] {\n    margin: 20px auto;\n      width:400px;\n      height:400px;\n      display:grid;\n      grid-template-columns: 200px 200px;\n      grid-row: auto auto;\n      grid-column-gap: 20px;\n      grid-row-gap: 20px;\n}\n#grid-column[data-v-1deb7a1b]{\n}\n#pos1[data-v-1deb7a1b]{\n}\n#pos2[data-v-1deb7a1b]{\n}\n#pos3[data-v-1deb7a1b]{\n}\n#pos4[data-v-1deb7a1b]{\n}\n#pos5[data-v-1deb7a1b]{\n}\n#pos6[data-v-1deb7a1b]{\n}\n#pos7[data-v-1deb7a1b]{\n}\n#pos8[data-v-1deb7a1b]{\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -245,13 +250,26 @@ var render = function () {
   return _c("div", { staticClass: "container" }, [
     _c(
       "div",
-      [
-        _vm._v("\n        Welcome to the game\n                "),
-        _vm._l(_vm.players, function (player, index) {
-          return _c("PlayerIcon", { key: index, attrs: { player: player } })
-        }),
-      ],
-      2
+      { staticClass: "wrapper" },
+      _vm._l(_vm.players, function (player, index) {
+        return _c("PlayerIcon", {
+          key: index,
+          attrs: { index: index + 1, player: player },
+        })
+      }),
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "wrapper2" },
+      _vm._l(_vm.hand, function (card, index) {
+        return _c("Card", {
+          key: index,
+          attrs: { card: card, index: index + 1 },
+        })
+      }),
+      1
     ),
     _vm._v(" "),
     _c(

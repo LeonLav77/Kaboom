@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <PlayerIcon v-for="(player, index) in players" :player="player" :key="index" />
+        <PlayerIcon v-for="(player, index) in players" :index="index+1" :player="player" :key="index" />
     <div id="countdownTimer">
         <div id="countdown">
             <div id="countdown-text">

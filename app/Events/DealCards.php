@@ -29,9 +29,8 @@ class DealCards implements ShouldBroadcast
         $this->game_id = $game_id;
         $this->user_id = $user_id;
         $this->deck = Deck::getDeck($this->game_id);
-        $this->hand = $this->deck->drawN(4);
+        $this->hand = $this->deck->drawN(4,$this->user_id);
         $this->deck->save();
-        // $this->hand = $this->deck->draw();
     }
     public function broadcastWith(){
         return [

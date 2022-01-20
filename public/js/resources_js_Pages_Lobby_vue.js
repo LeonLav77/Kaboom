@@ -286,7 +286,10 @@ var render = function () {
     { staticClass: "wrapper" },
     [
       _vm._l(_vm.players, function (player, index) {
-        return _c("PlayerIcon", { key: index, attrs: { player: player } })
+        return _c("PlayerIcon", {
+          key: index,
+          attrs: { index: index + 1, player: player },
+        })
       }),
       _vm._v(" "),
       _c("div", { attrs: { id: "countdownTimer" } }, [

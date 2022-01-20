@@ -6,7 +6,7 @@ abstract class Card {
     public $suit;
     public $value;
     public $color;
-    // public $backsides = env('APP_URL').'/storage/card_backsides.png';
+    public $backsides;
     public $frontside;
     public function __construct($number, $suit, $value, $color, $frontside) {
 
@@ -15,6 +15,7 @@ abstract class Card {
         $this->value = $value;
         $this->color = $color;
         $this->frontside = $frontside;
+        $this->backsides = env('APP_URL').'/storage/Cards/card_backsides.png';
     }
     abstract public function powerUp();
 

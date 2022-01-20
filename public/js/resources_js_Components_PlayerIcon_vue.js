@@ -22,6 +22,10 @@ __webpack_require__.r(__webpack_exports__);
     player: {
       type: Object,
       required: true
+    },
+    index: {
+      type: Number,
+      required: true
     }
   }
 });
@@ -113,7 +117,13 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "playerIcon" }, [
-    _c("img", { attrs: { src: _vm.player.photo, alt: _vm.player.name } }),
+    _c("img", {
+      attrs: {
+        src: _vm.player.photo,
+        alt: _vm.player.name,
+        id: "pos" + _vm.index,
+      },
+    }),
   ])
 }
 var staticRenderFns = []

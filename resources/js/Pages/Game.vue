@@ -1,9 +1,10 @@
 <template>
   <div class="container">
-      <div>
-          Welcome to the game
-                  <PlayerIcon v-for="(player, index) in players" :player="player" :key="index" />
-
+      <div class="wrapper">
+        <PlayerIcon v-for="(player, index) in players" :index="index+1" :player="player" :key="index" />
+      </div>
+      <div class="wrapper2">
+        <Card v-for="(card, index) in hand" :card="card" :index="index+1" :key="index" />
       </div>
       <button @click="makeMove()">Make Move</button>
       <button @click="dealCards()">Deal Cards</button>
@@ -14,11 +15,13 @@
 export default {
     components: {
         PlayerIcon: () => import('../Components/PlayerIcon.vue'),
+        Card: () => import('../Components/Card.vue')
     },
     data: () => ({
       players: [],
         number_of_players: 0,
         me: null,
+        hand : [],
     }),
     mounted() {
       axios.post('/api/userInfo')
@@ -26,9 +29,9 @@ export default {
           this.me = response.data;
             console.log(this.me);
             var gameUserChannel = window.Echo.private('game.'+this.$route.params.id+'_user.'+this.me.id);
-            // 'game.' . $this->game_id . '_user.' . $this->user_id
             gameUserChannel.listen('DealCards', (e) => {
-              console.log(e);
+              console.log(e.hand);
+              this.hand = e.hand;
             });
       window.Echo.leave();
         var mainchannel = window.Echo.join('game.'+this.$route.params.id);
@@ -99,4 +102,33 @@ methods: {
         font-size:40px;
         font-family:sans-serif;
     }
+    .wrapper2 {
+      margin: 20px auto;
+        width:400px;
+        height:400px;
+        display:grid;
+        grid-template-columns: 200px 200px;
+        grid-row: auto auto;
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
+  }
+  #grid-column{
+  }
+  #pos1{
+  }
+  #pos2{
+  }
+  #pos3{
+  }
+  #pos4{
+  }
+  #pos5{
+  }
+  #pos6{
+  }
+  #pos7{
+  }
+  #pos8{
+  }
+
 </style>

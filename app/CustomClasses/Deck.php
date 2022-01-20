@@ -13,6 +13,7 @@ use App\CustomClasses\CardTypes\SevenEight;
 class Deck {
     public $deck = [];
     public $game_id = null;
+    public $hands = [];
     public function __construct($game_id){
         $this->game_id = $game_id;
         $deck = [];
@@ -78,17 +79,20 @@ class Deck {
         }
         return null;
     }
-    public function draw(){
-        $card = array_pop($this->deck);
-        return $card;
-    }
-    public function drawN($n){
+    // public function draw(){
+    //     $card = array_pop($this->deck);
+    //     return $card;
+    // }
+    public function drawN($n,$user_id){
         $cards = [];
         for($i=0;$i<$n;$i++){
             $cards[] = array_pop($this->deck);
         }
+        $this->hands[$user_id] = $cards;
         return $cards;
     }
-
+    public function revealCard($user_id,$card_id){
+        return $this->hands[$user_id][$card_id];
+    }
 }
 ?>
