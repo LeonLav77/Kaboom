@@ -32,6 +32,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'home',
@@ -48,6 +50,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   },
   methods: {
+    Test: function Test() {
+      this.$router.push('/test');
+    },
+    Test2: function Test2() {
+      this.$router.push('/2PlayerTest');
+    },
     joinGame: function joinGame() {
       var _this = this;
 
@@ -314,6 +322,30 @@ var render = function () {
         },
       },
       [_vm._v("logout")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.Test()
+          },
+        },
+      },
+      [_vm._v("Test")]
+    ),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        on: {
+          click: function ($event) {
+            return _vm.Test2()
+          },
+        },
+      },
+      [_vm._v("2Player")]
     ),
   ])
 }

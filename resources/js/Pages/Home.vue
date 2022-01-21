@@ -9,6 +9,8 @@
     <button @click="login3()">login2</button>
     <button @click="register3()">register2</button>
     <button @click="logout()">logout</button>
+    <button @click="Test()">Test</button>
+    <button @click="Test2()">2Player</button>
   </div>
 </template>
 
@@ -31,6 +33,12 @@ export default {
       });
   },
   methods: {
+    Test() {
+        this.$router.push('/test');
+    },
+      Test2() {
+        this.$router.push('/2PlayerTest');
+    },
     joinGame() {
       // redirect to /game/join
       axios.post('/api/lobby/join',{

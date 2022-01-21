@@ -6,14 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="logo.png" type="image/x-icon">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}" />
-
+    <style>
+        #app {
+            height: 100vh;
+            width: 100vw;
+        }
+    </style>
     <title>{{env('APP_NAME')}}</title>
 </head>
 <body>
     <div id="app">
         <app></app>
     </div>
-
     <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>

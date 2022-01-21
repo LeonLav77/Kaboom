@@ -19,6 +19,16 @@ const routes = [
     component: () => import('../Pages/Game.vue'),
     name: 'Game'
   },
+  {
+    path: '/test',
+    component: () => import('../Pages/Hello.vue'),
+    name: 'Hello'
+  },
+  {
+    path: '/2PlayerTest',
+    component: () => import('../Pages/2PlayerTest.vue'),
+    name: '2PlayerTest'
+  },
 ]
 
 export default routes;

@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <Navbar></Navbar>
+    <!-- <Navbar></Navbar> -->
     <router-view></router-view>
   </div>
 </template>
@@ -42,4 +42,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .app {
+    height: 100%;
+    width: 100%;
+  }
+</style>
 

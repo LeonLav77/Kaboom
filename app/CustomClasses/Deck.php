@@ -14,6 +14,7 @@ class Deck {
     public $deck = [];
     public $game_id = null;
     public $hands = [];
+    public $revealedInHand = [];
     public function __construct($game_id){
         $this->game_id = $game_id;
         $deck = [];
@@ -92,6 +93,12 @@ class Deck {
         return $cards;
     }
     public function revealCard($user_id,$card_id){
+        // if user has more than 2 revealed cards, return false
+        if(isset($this->revealedInHand[$user_id]) && count($this->revealedInHand[$user_id]) >= 2){
+            return "Already looked at your cards";
+        }
+        // return count($this->revealedInHand[$user_id]);
+        $this->revealedInHand[$user_id][] = $this->hands[$user_id][$card_id];
         return $this->hands[$user_id][$card_id];
     }
 }
