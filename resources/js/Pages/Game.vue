@@ -1,21 +1,16 @@
 <template>
   <div class="containe">
       <div class="container">
-        <div class="player1">
+        <div class="player1" @click="logg">
             <PlayerIcon v-if="players[0]" :player="players[0]" :index="1" />
         </div>
-        <div class="player1card1"></div>
-        <div class="player1card2"></div>
-        <div class="player1card3"></div>
-        <div class="player1card4"></div>
-        <div class="player1card5"></div>
-        <div class="player1card6"></div>
-        <div class="player1card7"></div>
-        <div class="player1card8"></div>
+        <Card v-for="(card, index) in hand" :class="'player1card'+index" :card="card" :index="index" :key="index" />
+        <!-- <div class="player1card7"></div> -->
 
         <div class="player2">
             <PlayerIcon v-if="players[1]" :player="players[1]" :index="1" />
         </div>
+        <div class="player2card0"></div>
         <div class="player2card1"></div>
         <div class="player2card2"></div>
         <div class="player2card3"></div>
@@ -23,7 +18,6 @@
         <div class="player2card5"></div>
         <div class="player2card6"></div>
         <div class="player2card7"></div>
-        <div class="player2card8"></div>
     </div>
       <div class="wrapper2">
         <Card v-for="(card, index) in hand" :card="card" :index="index+1" :key="index" />
@@ -41,18 +35,25 @@ export default {
     },
     data: () => ({
       players: [],
-        number_of_players: 0,
-        me: null,
-        hand : [],
+      number_of_players: 0,
+      me: null,
+      hand : [],
+      player: {
+        name: '',
+        id: '',
+        cards: [],
+        photo: '',
+      }
     }),
     mounted() {
       axios.post('/api/userInfo')
         .then(response => {
           this.me = response.data;
-            console.log(this.me);
+            // console.log(this.me);
             var gameUserChannel = window.Echo.private('game.'+this.$route.params.id+'_user.'+this.me.id);
             gameUserChannel.listen('DealCards', (e) => {
-              console.log(e.hand);
+              // console.log(e.hand);
+              this.players.me = e.hand;
               this.hand = e.hand;
             });
       window.Echo.leave();
@@ -60,6 +61,7 @@ export default {
         mainchannel.here((users) => {
           this.dealCards();
           users.forEach(user => {
+            // console.log(user);
             this.players.push(user);
             });
         });
@@ -75,7 +77,7 @@ export default {
         // subscribe to gameMoves channel
         var gameMovesChannel = window.Echo.channel('moves.'+this.$route.params.id);
         gameMovesChannel.listen('Move', (e) => {
-          console.log(e);
+          // console.log(e);
         });
         // subscribe to game.{game_id}_user.{$user_id} channel
 
@@ -87,7 +89,7 @@ methods: {
       game_id: this.$route.params.id
     })
     .then(response => {
-      console.log(response.data);
+      // console.log(response.data);
     });
   },
   dealCards(){
@@ -95,9 +97,12 @@ methods: {
       game_id: this.$route.params.id
     })
     .then(response => {
-      console.log(response.data);
+      // console.log(response.data);
     });
   },
+  logg(){
+    console.log(this.players);
+  }
 }
 }
 </script>
@@ -132,37 +137,37 @@ methods: {
 
 .player2 { grid-area: player2; }
 
-.player1card1 { grid-area: player1card1; }
+.player1card0 { grid-area: player1card1; }
 
-.player1card2 { grid-area: player1card2; }
+.player1card1 { grid-area: player1card2; }
 
-.player1card3 { grid-area: player1card3; }
+.player1card2 { grid-area: player1card3; }
 
-.player1card4 { grid-area: player1card4; }
+.player1card3 { grid-area: player1card4; }
 
-.player1card5 { grid-area: player1card5; }
+.player1card4 { grid-area: player1card5; }
 
-.player1card6 { grid-area: player1card6; }
+.player1card5 { grid-area: player1card6; }
 
-.player1card7 { grid-area: player1card7; }
+.player1card6 { grid-area: player1card7; }
 
-.player1card8 { grid-area: player1card8; }
+.player1card7 { grid-area: player1card8; }
 
-.player2card1 { grid-area: player2card1; }
+.player2card0 { grid-area: player2card1; }
 
-.player2card2 { grid-area: player2card2; }
+.player2card1 { grid-area: player2card2; }
 
-.player2card3 { grid-area: player2card3; }
+.player2card2 { grid-area: player2card3; }
 
-.player2card4 { grid-area: player2card4; }
+.player2card3 { grid-area: player2card4; }
 
-.player2card5 { grid-area: player2card5; }
+.player2card4 { grid-area: player2card5; }
 
-.player2card6 { grid-area: player2card6; }
+.player2card5 { grid-area: player2card6; }
 
-.player2card7 { grid-area: player2card7; }
+.player2card6 { grid-area: player2card7; }
 
-.player2card8 { grid-area: player2card8; }
+.player2card7 { grid-area: player2card8; }
 
     .playerIcon {
         background-color:#333;

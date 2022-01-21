@@ -40,12 +40,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -60,18 +54,25 @@ __webpack_require__.r(__webpack_exports__);
       players: [],
       number_of_players: 0,
       me: null,
-      hand: []
+      hand: [],
+      player: {
+        name: '',
+        id: '',
+        cards: [],
+        photo: ''
+      }
     };
   },
   mounted: function mounted() {
     var _this = this;
 
     axios.post('/api/userInfo').then(function (response) {
-      _this.me = response.data;
-      console.log(_this.me);
+      _this.me = response.data; // console.log(this.me);
+
       var gameUserChannel = window.Echo["private"]('game.' + _this.$route.params.id + '_user.' + _this.me.id);
       gameUserChannel.listen('DealCards', function (e) {
-        console.log(e.hand);
+        // console.log(e.hand);
+        _this.players.me = e.hand;
         _this.hand = e.hand;
       });
       window.Echo.leave();
@@ -80,6 +81,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.dealCards();
 
         users.forEach(function (user) {
+          // console.log(user);
           _this.players.push(user);
         });
       });
@@ -94,8 +96,7 @@ __webpack_require__.r(__webpack_exports__);
       }); // subscribe to gameMoves channel
 
       var gameMovesChannel = window.Echo.channel('moves.' + _this.$route.params.id);
-      gameMovesChannel.listen('Move', function (e) {
-        console.log(e);
+      gameMovesChannel.listen('Move', function (e) {// console.log(e);
       }); // subscribe to game.{game_id}_user.{$user_id} channel
     });
   },
@@ -103,16 +104,17 @@ __webpack_require__.r(__webpack_exports__);
     makeMove: function makeMove() {
       axios.post('/api/makeMove', {
         game_id: this.$route.params.id
-      }).then(function (response) {
-        console.log(response.data);
+      }).then(function (response) {// console.log(response.data);
       });
     },
     dealCards: function dealCards() {
       axios.post('/api/dealCards', {
         game_id: this.$route.params.id
-      }).then(function (response) {
-        console.log(response.data);
+      }).then(function (response) {// console.log(response.data);
       });
+    },
+    logg: function logg() {
+      console.log(this.players);
     }
   }
 });
@@ -135,7 +137,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.containe[data-v-1deb7a1b]{\r\n  width: 100;\r\n  height: 100;\n}\n.container[data-v-1deb7a1b] {  \r\n    height: 100vh;\r\n    width: 100vw;\r\n    display: grid;\r\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\r\n  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\r\n  grid-auto-columns: 1fr;\r\n  gap: 0px 0px;\r\n  grid-auto-flow: row;\r\n  grid-template-areas:\r\n    \". . . player2 player2 . . .\"\r\n    \". . . player2 player2 . . .\"\r\n    \". . player2card5 player2card4 player2card3 player2card8 . .\"\r\n    \". . player2card6 player2card2 player2card1 player2card7 . .\"\r\n    \". . . . . . . .\"\r\n    \". . player1card7 player1card1 player1card2 player1card6 . .\"\r\n    \". . player1card8 player1card3 player1card4 player1card5 . .\"\r\n    \". . . player1 player1 . . .\"\r\n    \". . . player1 player1 . . .\";\n}\n.player1[data-v-1deb7a1b] { grid-area: player1;\n}\n.player2[data-v-1deb7a1b] { grid-area: player2;\n}\n.player1card1[data-v-1deb7a1b] { grid-area: player1card1;\n}\n.player1card2[data-v-1deb7a1b] { grid-area: player1card2;\n}\n.player1card3[data-v-1deb7a1b] { grid-area: player1card3;\n}\n.player1card4[data-v-1deb7a1b] { grid-area: player1card4;\n}\n.player1card5[data-v-1deb7a1b] { grid-area: player1card5;\n}\n.player1card6[data-v-1deb7a1b] { grid-area: player1card6;\n}\n.player1card7[data-v-1deb7a1b] { grid-area: player1card7;\n}\n.player1card8[data-v-1deb7a1b] { grid-area: player1card8;\n}\n.player2card1[data-v-1deb7a1b] { grid-area: player2card1;\n}\n.player2card2[data-v-1deb7a1b] { grid-area: player2card2;\n}\n.player2card3[data-v-1deb7a1b] { grid-area: player2card3;\n}\n.player2card4[data-v-1deb7a1b] { grid-area: player2card4;\n}\n.player2card5[data-v-1deb7a1b] { grid-area: player2card5;\n}\n.player2card6[data-v-1deb7a1b] { grid-area: player2card6;\n}\n.player2card7[data-v-1deb7a1b] { grid-area: player2card7;\n}\n.player2card8[data-v-1deb7a1b] { grid-area: player2card8;\n}\n.playerIcon[data-v-1deb7a1b] {\r\n        background-color:#333;\r\n        padding:20px;\r\n        border-radius:10px;\r\n        color:#fff;\r\n        display:flex;\r\n        align-items:center;\r\n        justify-content:center;\r\n        font-size:40px;\r\n        font-family:sans-serif;\n}\r\n\r\n\r\n\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.containe[data-v-1deb7a1b]{\r\n  width: 100;\r\n  height: 100;\n}\n.container[data-v-1deb7a1b] {  \r\n    height: 100vh;\r\n    width: 100vw;\r\n    display: grid;\r\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\r\n  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\r\n  grid-auto-columns: 1fr;\r\n  gap: 0px 0px;\r\n  grid-auto-flow: row;\r\n  grid-template-areas:\r\n    \". . . player2 player2 . . .\"\r\n    \". . . player2 player2 . . .\"\r\n    \". . player2card5 player2card4 player2card3 player2card8 . .\"\r\n    \". . player2card6 player2card2 player2card1 player2card7 . .\"\r\n    \". . . . . . . .\"\r\n    \". . player1card7 player1card1 player1card2 player1card6 . .\"\r\n    \". . player1card8 player1card3 player1card4 player1card5 . .\"\r\n    \". . . player1 player1 . . .\"\r\n    \". . . player1 player1 . . .\";\n}\n.player1[data-v-1deb7a1b] { grid-area: player1;\n}\n.player2[data-v-1deb7a1b] { grid-area: player2;\n}\n.player1card0[data-v-1deb7a1b] { grid-area: player1card1;\n}\n.player1card1[data-v-1deb7a1b] { grid-area: player1card2;\n}\n.player1card2[data-v-1deb7a1b] { grid-area: player1card3;\n}\n.player1card3[data-v-1deb7a1b] { grid-area: player1card4;\n}\n.player1card4[data-v-1deb7a1b] { grid-area: player1card5;\n}\n.player1card5[data-v-1deb7a1b] { grid-area: player1card6;\n}\n.player1card6[data-v-1deb7a1b] { grid-area: player1card7;\n}\n.player1card7[data-v-1deb7a1b] { grid-area: player1card8;\n}\n.player2card0[data-v-1deb7a1b] { grid-area: player2card1;\n}\n.player2card1[data-v-1deb7a1b] { grid-area: player2card2;\n}\n.player2card2[data-v-1deb7a1b] { grid-area: player2card3;\n}\n.player2card3[data-v-1deb7a1b] { grid-area: player2card4;\n}\n.player2card4[data-v-1deb7a1b] { grid-area: player2card5;\n}\n.player2card5[data-v-1deb7a1b] { grid-area: player2card6;\n}\n.player2card6[data-v-1deb7a1b] { grid-area: player2card7;\n}\n.player2card7[data-v-1deb7a1b] { grid-area: player2card8;\n}\n.playerIcon[data-v-1deb7a1b] {\r\n        background-color:#333;\r\n        padding:20px;\r\n        border-radius:10px;\r\n        color:#fff;\r\n        display:flex;\r\n        align-items:center;\r\n        justify-content:center;\r\n        font-size:40px;\r\n        font-family:sans-serif;\n}\r\n\r\n\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -270,61 +272,62 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "containe" }, [
-    _c("div", { staticClass: "container" }, [
-      _c(
-        "div",
-        { staticClass: "player1" },
-        [
-          _vm.players[0]
-            ? _c("PlayerIcon", { attrs: { player: _vm.players[0], index: 1 } })
-            : _vm._e(),
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "player1card1" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player1card2" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player1card3" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player1card4" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player1card5" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player1card6" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player1card7" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player1card8" }),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "player2" },
-        [
-          _vm.players[1]
-            ? _c("PlayerIcon", { attrs: { player: _vm.players[1], index: 1 } })
-            : _vm._e(),
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "player2card1" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player2card2" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player2card3" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player2card4" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player2card5" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player2card6" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player2card7" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "player2card8" }),
-    ]),
+    _c(
+      "div",
+      { staticClass: "container" },
+      [
+        _c(
+          "div",
+          { staticClass: "player1", on: { click: _vm.logg } },
+          [
+            _vm.players[0]
+              ? _c("PlayerIcon", {
+                  attrs: { player: _vm.players[0], index: 1 },
+                })
+              : _vm._e(),
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _vm._l(_vm.hand, function (card, index) {
+          return _c("Card", {
+            key: index,
+            class: "player1card" + index,
+            attrs: { card: card, index: index },
+          })
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "player2" },
+          [
+            _vm.players[1]
+              ? _c("PlayerIcon", {
+                  attrs: { player: _vm.players[1], index: 1 },
+                })
+              : _vm._e(),
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "player2card0" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "player2card1" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "player2card2" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "player2card3" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "player2card4" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "player2card5" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "player2card6" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "player2card7" }),
+      ],
+      2
+    ),
     _vm._v(" "),
     _c(
       "div",
