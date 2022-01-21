@@ -39,9 +39,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       players: [],
-      me: null,
-      owner: null,
-      countDown: 2
+      me: null
     };
   }
 });

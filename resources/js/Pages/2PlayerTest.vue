@@ -27,8 +27,6 @@ export default {
     data: () => ({
         players: [],
         me: null,
-        owner: null,
-        countDown : 2
     }),
 }
 </script>
