@@ -22,6 +22,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -32,6 +34,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     PlayerField: function PlayerField() {
       return __webpack_require__.e(/*! import() */ "resources_js_Components_PlayerField_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Components/PlayerField.vue */ "./resources/js/Components/PlayerField.vue"));
+    },
+    Deck: function Deck() {
+      return __webpack_require__.e(/*! import() */ "resources_js_Components_Deck_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Components/Deck.vue */ "./resources/js/Components/Deck.vue"));
     }
   },
   data: function data() {
@@ -125,7 +130,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.containe{\r\n  width: 100;\r\n  height: 100;\n}\n.container {  \r\n  height: 100vh;\r\n  width: 100vw;\r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \". . player1 . .\"\r\n    \". cardField1 cardField1 cardField1 .\"\r\n    \". cardField1 cardField1 cardField1 .\"\r\n    \". playField playField playField .\"\r\n    \". playField playField playField .\"\r\n    \". cardField0 cardField0 cardField0 .\"\r\n    \". cardField0 cardField0 cardField0 .\"\r\n    \". . player0 . .\";\n}\n.player0 {\r\n  grid-area: player0; \r\n  justify-items: center;\r\n  align-items: center;\n}\n.player1 { grid-area: player1;\r\n  justify-items: center;\r\n  align-items: center;\n}\n.cardField0 { \r\n  grid-area: cardField0; \r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \"player0card6 player0card0 player0card1 player0card5\"\r\n    \"player0card7 player0card2 player0card3 player0card4\"; \r\n    /* start output from top */\n}\n.cardField1 { \r\n  grid-area: cardField1; \r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \"player1card6 player1card0 player1card1 player1card5\"\r\n    \"player1card7 player1card2 player1card3 player1card4\";\n}\n.player0card0 { grid-area: player0card0;\n}\n.player0card1 { grid-area: player0card1;\n}\n.player0card2 { grid-area: player0card2;\n}\n.player0card3 { grid-area: player0card3;\n}\n.player0card4 { grid-area: player0card4;\n}\n.player0card5 { grid-area: player0card5;\n}\n.player0card6 { grid-area: player0card6;\n}\n.player0card7 { grid-area: player0card7;\n}\n.player1card0 { grid-area: player1card0;\n}\n.player1card1 { grid-area: player1card1;\n}\n.player1card2 { grid-area: player1card2;\n}\n.player1card3 { grid-area: player1card3;\n}\n.player1card4 { grid-area: player1card4;\n}\n.player1card5 { grid-area: player1card5;\n}\n.player1card6 { grid-area: player1card6;\n}\n.player1card7 { grid-area: player1card7;\n}\n.playerIcon {\r\n  justify-items: center;\r\n  align-items: center;\n}\n.playField { grid-area: playField;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.containe{\r\n  width: 100;\r\n  height: 100;\n}\n.container {  \r\n  height: 100vh;\r\n  width: 100vw;\r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \". . player1 . .\"\r\n    \". cardField1 cardField1 cardField1 .\"\r\n    \". cardField1 cardField1 cardField1 .\"\r\n    \". playField playField playField .\"\r\n    \". playField playField playField .\"\r\n    \". cardField0 cardField0 cardField0 .\"\r\n    \". cardField0 cardField0 cardField0 .\"\r\n    \". . player0 . .\";\n}\n.player0 {\r\n  grid-area: player0; \r\n  justify-items: center;\r\n  align-items: center;\n}\n.player1 { grid-area: player1;\r\n  justify-items: center;\r\n  align-items: center;\n}\n.cardField0 { \r\n  grid-area: cardField0; \r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \"player0card6 player0card0 player0card1 player0card5\"\r\n    \"player0card7 player0card2 player0card3 player0card4\"; \r\n    /* start output from top */\n}\n.cardField1 { \r\n  grid-area: cardField1; \r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \"player1card6 player1card0 player1card1 player1card5\"\r\n    \"player1card7 player1card2 player1card3 player1card4\";\n}\n.player0card0 { grid-area: player0card0;\n}\n.player0card1 { grid-area: player0card1;\n}\n.player0card2 { grid-area: player0card2;\n}\n.player0card3 { grid-area: player0card3;\n}\n.player0card4 { grid-area: player0card4;\n}\n.player0card5 { grid-area: player0card5;\n}\n.player0card6 { grid-area: player0card6;\n}\n.player0card7 { grid-area: player0card7;\n}\n.player1card0 { grid-area: player1card0;\n}\n.player1card1 { grid-area: player1card1;\n}\n.player1card2 { grid-area: player1card2;\n}\n.player1card3 { grid-area: player1card3;\n}\n.player1card4 { grid-area: player1card4;\n}\n.player1card5 { grid-area: player1card5;\n}\n.player1card6 { grid-area: player1card6;\n}\n.player1card7 { grid-area: player1card7;\n}\n.playerIcon {\r\n  justify-items: center;\r\n  align-items: center;\n}\n.playField {\r\n    grid-area: playField; \r\n    display: flex;\r\n    align-items: center;\n}\n.left {\r\n    justify-content: left;\n}\n.right {\r\n    justify-content: right;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -292,6 +297,10 @@ var render = function () {
             attrs: { player: player, index: index },
           })
         }),
+        _vm._v(" "),
+        _c("Deck", { attrs: { side: "left" } }),
+        _vm._v(" "),
+        _c("Deck", { attrs: { side: "right" } }),
       ],
       2
     ),

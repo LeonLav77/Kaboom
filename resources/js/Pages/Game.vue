@@ -5,6 +5,8 @@
             <PlayerIcon v-if="player" :player="player" :index="index" />
         </div>
         <PlayerField  v-for="(player, index) in players" :player="player" :class="'cardField'+index" :index="index" :key="'player'+player.id" />
+        <Deck :side="'left'" />
+        <Deck :side="'right'" />
     </div>
   </div>
 </template>
@@ -14,7 +16,8 @@ export default {
     components: {
         PlayerIcon: () => import('../Components/PlayerIcon.vue'),
         Card: () => import('../Components/Card.vue'),
-        PlayerField: () => import('../Components/PlayerField.vue')
+        PlayerField: () => import('../Components/PlayerField.vue'),
+        Deck: () => import('../Components/Deck.vue'),
     },
     data: () => ({
       players: [],
@@ -174,5 +177,15 @@ methods: {
   justify-items: center;
   align-items: center;
   }
-  .playField { grid-area: playField; }
+  .playField {
+    grid-area: playField; 
+    display: flex;
+    align-items: center;
+  }
+  .left {
+    justify-content: left;
+  }
+  .right {
+    justify-content: right;
+  }
 </style>

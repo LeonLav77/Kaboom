@@ -18,7 +18,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      revealedCard: [],
+      countDown: 3
+    };
+  },
   name: 'Card',
   props: {
     card: {
@@ -36,17 +45,37 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     revealCard: function revealCard() {
-      // console.log(this.card);
-      // console.log(this.index);
+      var _this = this;
+
       axios.post('/api/revealCard', {
         game_id: this.$route.params.id,
         card_id: this.index,
         player_id: this.player_id
       }).then(function (response) {
-        console.log(response.data);
+        if (typeof response.data == 'string') {
+          console.log(response.data);
+        } else {
+          _this.revealedCard.push(response.data);
+
+          _this.countDownTimer();
+        }
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    countDownTimer: function countDownTimer() {
+      var _this2 = this;
+
+      if (this.countDown > 0) {
+        setTimeout(function () {
+          _this2.countDown -= 1;
+
+          _this2.countDownTimer();
+        }, 1000);
+      } else {
+        this.revealedCard = [];
+        console.log('time is up');
+      }
     }
   }
 });
@@ -138,21 +167,32 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "Card" }, [
-    _c("div", [
-      _c("img", {
-        attrs: {
-          src: _vm.card.backsides,
-          width: "100",
-          height: "150",
-          id: _vm.index,
-        },
-        on: {
-          click: function ($event) {
-            return _vm.revealCard()
-          },
-        },
-      }),
-    ]),
+    this.revealedCard[0] == null
+      ? _c("div", [
+          _c("img", {
+            attrs: {
+              src: _vm.card.backsides,
+              width: "100",
+              height: "150",
+              id: _vm.index,
+            },
+            on: {
+              click: function ($event) {
+                return _vm.revealCard()
+              },
+            },
+          }),
+        ])
+      : _c("div", [
+          _c("img", {
+            attrs: {
+              src: _vm.revealedCard[0].frontside,
+              width: "100",
+              height: "150",
+              id: _vm.index,
+            },
+          }),
+        ]),
   ])
 }
 var staticRenderFns = []
