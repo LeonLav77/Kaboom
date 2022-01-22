@@ -26,15 +26,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -42,6 +33,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     Card: function Card() {
       return __webpack_require__.e(/*! import() */ "resources_js_Components_Card_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Components/Card.vue */ "./resources/js/Components/Card.vue"));
+    },
+    PlayerField: function PlayerField() {
+      return __webpack_require__.e(/*! import() */ "resources_js_Components_PlayerField_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Components/PlayerField.vue */ "./resources/js/Components/PlayerField.vue"));
     }
   },
   data: function data() {
@@ -55,6 +49,13 @@ __webpack_require__.r(__webpack_exports__);
         id: '',
         cards: [],
         photo: ''
+      },
+      card: {
+        value: '',
+        color: '',
+        suit: '',
+        backsides: 'http://127.0.0.1:8000/storage/Cards/card_backsides.png',
+        frontside: ''
       }
     };
   },
@@ -67,7 +68,6 @@ __webpack_require__.r(__webpack_exports__);
       var gameUserChannel = window.Echo["private"]('game.' + _this.$route.params.id + '_user.' + _this.me.id);
       gameUserChannel.listen('DealCards', function (e) {
         // console.log(e.hand);
-        _this.players.me = e.hand;
         _this.hand = e.hand;
       });
       window.Echo.leave();
@@ -77,10 +77,14 @@ __webpack_require__.r(__webpack_exports__);
 
         users.forEach(function (user) {
           // console.log(user);
+          user.hand = [_this.card, _this.card, _this.card, _this.card]; // this.players[user.id].push(user);
+
           _this.players.push(user);
         });
       });
       mainchannel.joining(function (user) {
+        user.hand = [_this.card, _this.card, _this.card, _this.card]; // this.players[user.id].push(user);
+
         _this.players.push(user);
       });
       mainchannel.leaving(function (user) {
@@ -92,16 +96,10 @@ __webpack_require__.r(__webpack_exports__);
 
       var gameMovesChannel = window.Echo.channel('moves.' + _this.$route.params.id);
       gameMovesChannel.listen('Move', function (e) {// console.log(e);
-      }); // subscribe to game.{game_id}_user.{$user_id} channel
+      });
     });
   },
   methods: {
-    makeMove: function makeMove() {
-      axios.post('/api/makeMove', {
-        game_id: this.$route.params.id
-      }).then(function (response) {// console.log(response.data);
-      });
-    },
     dealCards: function dealCards() {
       axios.post('/api/dealCards', {
         game_id: this.$route.params.id
@@ -109,6 +107,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     logg: function logg() {
+      // find user by id in players array
+      for (var i = 0; i < this.players.length; i++) {
+        if (this.players[i].id == this.me.id) {
+          console.log(this.players[i].hand);
+        }
+      }
+
       console.log(this.players);
     }
   }
@@ -132,7 +137,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.containe[data-v-1deb7a1b]{\r\n  width: 100;\r\n  height: 100;\n}\n.container[data-v-1deb7a1b] {  \r\n    height: 100vh;\r\n    width: 100vw;\r\n    display: grid;\r\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\r\n  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\r\n  grid-auto-columns: 1fr;\r\n  gap: 0px 0px;\r\n  grid-auto-flow: row;\r\n  grid-template-areas:\r\n    \". . . player2 player2 . . .\"\r\n    \". . . player2 player2 . . .\"\r\n    \". . player2card5 player2card4 player2card3 player2card8 . .\"\r\n    \". . player2card6 player2card2 player2card1 player2card7 . .\"\r\n    \". . . . . . . .\"\r\n    \". . player1card7 player1card1 player1card2 player1card6 . .\"\r\n    \". . player1card8 player1card3 player1card4 player1card5 . .\"\r\n    \". . . player1 player1 . . .\"\r\n    \". . . player1 player1 . . .\";\n}\n.player1[data-v-1deb7a1b] { grid-area: player1;\n}\n.player2[data-v-1deb7a1b] { grid-area: player2;\n}\n.player1card0[data-v-1deb7a1b] { grid-area: player1card1;\n}\n.player1card1[data-v-1deb7a1b] { grid-area: player1card2;\n}\n.player1card2[data-v-1deb7a1b] { grid-area: player1card3;\n}\n.player1card3[data-v-1deb7a1b] { grid-area: player1card4;\n}\n.player1card4[data-v-1deb7a1b] { grid-area: player1card5;\n}\n.player1card5[data-v-1deb7a1b] { grid-area: player1card6;\n}\n.player1card6[data-v-1deb7a1b] { grid-area: player1card7;\n}\n.player1card7[data-v-1deb7a1b] { grid-area: player1card8;\n}\n.player2card0[data-v-1deb7a1b] { grid-area: player2card1;\n}\n.player2card1[data-v-1deb7a1b] { grid-area: player2card2;\n}\n.player2card2[data-v-1deb7a1b] { grid-area: player2card3;\n}\n.player2card3[data-v-1deb7a1b] { grid-area: player2card4;\n}\n.player2card4[data-v-1deb7a1b] { grid-area: player2card5;\n}\n.player2card5[data-v-1deb7a1b] { grid-area: player2card6;\n}\n.player2card6[data-v-1deb7a1b] { grid-area: player2card7;\n}\n.player2card7[data-v-1deb7a1b] { grid-area: player2card8;\n}\n.playerIcon[data-v-1deb7a1b] {\r\n        background-color:#333;\r\n        padding:20px;\r\n        border-radius:10px;\r\n        color:#fff;\r\n        display:flex;\r\n        align-items:center;\r\n        justify-content:center;\r\n        font-size:40px;\r\n        font-family:sans-serif;\n}\r\n\r\n\r\n\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.containe[data-v-1deb7a1b]{\r\n  width: 100;\r\n  height: 100;\n}\n.container[data-v-1deb7a1b] {  \r\n  height: 100vh;\r\n  width: 100vw;\r\n  display: grid;\r\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\r\n  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;\r\n  grid-auto-columns: 1fr;\r\n  gap: 0px 0px;\r\n  grid-auto-flow: row;\n}\n.player0[data-v-1deb7a1b] { grid-area: 8 / 4 / 10 / 6;\n}\n.player1[data-v-1deb7a1b] { grid-area: 1 / 4 / 3 / 6;\n}\n.player1card0[data-v-1deb7a1b] { grid-area: 6 / 4 / 7 / 5;\n}\n.player1card1[data-v-1deb7a1b] { grid-area: 6 / 5 / 7 / 6;\n}\n.player1card2[data-v-1deb7a1b] { grid-area: 7 / 4 / 8 / 5;\n}\n.player1card3[data-v-1deb7a1b] { grid-area: 7 / 5 / 8 / 6;\n}\n.player1card4[data-v-1deb7a1b] { grid-area: 7 / 6 / 8 / 7;\n}\n.player1card5[data-v-1deb7a1b] { grid-area: 6 / 6 / 7 / 7;\n}\n.player1card6[data-v-1deb7a1b] { grid-area: 6 / 3 / 7 / 4;\n}\n.player1card7[data-v-1deb7a1b] { grid-area: 7 / 3 / 8 / 4;\n}\n.player2card0[data-v-1deb7a1b] { grid-area: 4 / 5 / 5 / 6;\n}\n.player2card1[data-v-1deb7a1b] { grid-area: 4 / 4 / 5 / 5;\n}\n.player2card2[data-v-1deb7a1b] { grid-area: 3 / 5 / 4 / 6;\n}\n.player2card3[data-v-1deb7a1b] { grid-area: 3 / 4 / 4 / 5;\n}\n.player2card4[data-v-1deb7a1b] { grid-area: 3 / 3 / 4 / 4;\n}\n.player2card5[data-v-1deb7a1b] { grid-area: 4 / 3 / 5 / 4;\n}\n.player2card6[data-v-1deb7a1b] { grid-area: 4 / 6 / 5 / 7;\n}\n.player2card7[data-v-1deb7a1b] { grid-area: 3 / 6 / 4 / 7;\n}\n.playerField1[data-v-1deb7a1b] { grid-area: 6 / 3 / 10 / 7;\n}\n.playerField2[data-v-1deb7a1b] { grid-area: 1 / 3 / 5 / 7;\n}\n.playerIcon[data-v-1deb7a1b] {\r\n        background-color:#333;\r\n        padding:20px;\r\n        border-radius:10px;\r\n        color:#fff;\r\n        display:flex;\r\n        align-items:center;\r\n        justify-content:center;\r\n        font-size:40px;\r\n        font-family:sans-serif;\n}\r\n\r\n\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -271,18 +276,26 @@ var render = function () {
       "div",
       { staticClass: "container" },
       [
-        _c(
-          "div",
-          { staticClass: "player1", on: { click: _vm.logg } },
-          [
-            _vm.players[0]
-              ? _c("PlayerIcon", {
-                  attrs: { player: _vm.players[0], index: 1 },
-                })
-              : _vm._e(),
-          ],
-          1
-        ),
+        _vm._l(_vm.players, function (player, index) {
+          return _c(
+            "div",
+            {
+              key: player.id,
+              class: "player" + index,
+              on: {
+                click: function ($event) {
+                  return _vm.logg()
+                },
+              },
+            },
+            [
+              player
+                ? _c("PlayerIcon", { attrs: { player: player, index: index } })
+                : _vm._e(),
+            ],
+            1
+          )
+        }),
         _vm._v(" "),
         _vm._l(_vm.hand, function (card, index) {
           return _c("Card", {
@@ -292,34 +305,13 @@ var render = function () {
           })
         }),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "player2" },
-          [
-            _vm.players[1]
-              ? _c("PlayerIcon", {
-                  attrs: { player: _vm.players[1], index: 1 },
-                })
-              : _vm._e(),
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "player2card0" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "player2card1" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "player2card2" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "player2card3" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "player2card4" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "player2card5" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "player2card6" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "player2card7" }),
+        _vm._l(_vm.hand, function (card, index) {
+          return _c("Card", {
+            key: index + 10,
+            class: "player2card" + index,
+            attrs: { card: card, index: index },
+          })
+        }),
       ],
       2
     ),

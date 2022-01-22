@@ -1,6 +1,8 @@
 <template>
   <div class="Card">
-    <img @click="revealCard()" :src="card.backsides" width="100" height="150" :id="index" />
+    <div>
+      <img @click="revealCard()" :src="card.backsides" width="100" height="150" :id="index" />
+    </div>
   </div>
 </template>
 <script>

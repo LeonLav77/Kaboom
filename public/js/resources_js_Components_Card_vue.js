@@ -16,6 +16,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Card',
   props: {
@@ -129,19 +131,21 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "Card" }, [
-    _c("img", {
-      attrs: {
-        src: _vm.card.backsides,
-        width: "100",
-        height: "150",
-        id: _vm.index,
-      },
-      on: {
-        click: function ($event) {
-          return _vm.revealCard()
+    _c("div", [
+      _c("img", {
+        attrs: {
+          src: _vm.card.backsides,
+          width: "100",
+          height: "150",
+          id: _vm.index,
         },
-      },
-    }),
+        on: {
+          click: function ($event) {
+            return _vm.revealCard()
+          },
+        },
+      }),
+    ]),
   ])
 }
 var staticRenderFns = []

@@ -1,23 +1,14 @@
 <template>
   <div class="containe">
       <div class="container">
-        <div class="player1" @click="logg">
-            <PlayerIcon v-if="players[0]" :player="players[0]" :index="1" />
+        <div v-for="(player, index) in players" @click="logg()" :key="player.id" :class="'player'+index">
+            <PlayerIcon v-if="player" :player="player" :index="index" />
         </div>
+        <!-- <div v-for="(player, index) in players" :index="index" :card="player.hand.card" :key="index">
+          <img :src="card.backsides" width="100" height="150" :id="index" />
+        </div> -->
         <Card v-for="(card, index) in hand" :class="'player1card'+index" :card="card" :index="index" :key="index" />
-        <!-- <div class="player1card7"></div> -->
-
-        <div class="player2">
-            <PlayerIcon v-if="players[1]" :player="players[1]" :index="1" />
-        </div>
-        <div class="player2card0"></div>
-        <div class="player2card1"></div>
-        <div class="player2card2"></div>
-        <div class="player2card3"></div>
-        <div class="player2card4"></div>
-        <div class="player2card5"></div>
-        <div class="player2card6"></div>
-        <div class="player2card7"></div>
+        <Card v-for="(card, index) in hand" :class="'player2card'+index" :card="card" :index="index" :key="index+10" />
     </div>
   </div>
 </template>
@@ -26,7 +17,8 @@
 export default {
     components: {
         PlayerIcon: () => import('../Components/PlayerIcon.vue'),
-        Card: () => import('../Components/Card.vue')
+        Card: () => import('../Components/Card.vue'),
+        PlayerField: () => import('../Components/PlayerField.vue')
     },
     data: () => ({
       players: [],
@@ -38,6 +30,13 @@ export default {
         id: '',
         cards: [],
         photo: '',
+      },
+      card:{
+        value: '',
+        color: '',
+        suit: '',
+        backsides: 'http://127.0.0.1:8000/storage/Cards/card_backsides.png',
+        frontside: '',
       }
     }),
     mounted() {
@@ -48,7 +47,6 @@ export default {
             var gameUserChannel = window.Echo.private('game.'+this.$route.params.id+'_user.'+this.me.id);
             gameUserChannel.listen('DealCards', (e) => {
               // console.log(e.hand);
-              this.players.me = e.hand;
               this.hand = e.hand;
             });
       window.Echo.leave();
@@ -57,10 +55,24 @@ export default {
           this.dealCards();
           users.forEach(user => {
             // console.log(user);
+            user.hand = [
+              this.card,
+              this.card,
+              this.card,
+              this.card,
+            ];
+            // this.players[user.id].push(user);
             this.players.push(user);
             });
         });
         mainchannel.joining((user) => {
+            user.hand = [
+              this.card,
+              this.card,
+              this.card,
+              this.card,
+            ];
+            // this.players[user.id].push(user);
             this.players.push(user);
           });
         mainchannel.leaving((user) => {
@@ -74,19 +86,9 @@ export default {
         gameMovesChannel.listen('Move', (e) => {
           // console.log(e);
         });
-        // subscribe to game.{game_id}_user.{$user_id} channel
-
         });
 },
 methods: {
-  makeMove(){
-    axios.post('/api/makeMove', {
-      game_id: this.$route.params.id
-    })
-    .then(response => {
-      // console.log(response.data);
-    });
-  },
   dealCards(){
     axios.post('/api/dealCards', {
       game_id: this.$route.params.id
@@ -96,6 +98,12 @@ methods: {
     });
   },
   logg(){
+    // find user by id in players array
+    for(var i = 0; i < this.players.length; i++){
+      if(this.players[i].id == this.me.id){
+        console.log(this.players[i].hand);
+      }
+    }
     console.log(this.players);
   }
 }
@@ -108,61 +116,55 @@ methods: {
   height: 100;
 }
 .container {  
-    height: 100vh;
-    width: 100vw;
-    display: grid;
+  height: 100vh;
+  width: 100vw;
+  display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-auto-columns: 1fr;
   gap: 0px 0px;
   grid-auto-flow: row;
-  grid-template-areas:
-    ". . . player2 player2 . . ."
-    ". . . player2 player2 . . ."
-    ". . player2card5 player2card4 player2card3 player2card8 . ."
-    ". . player2card6 player2card2 player2card1 player2card7 . ."
-    ". . . . . . . ."
-    ". . player1card7 player1card1 player1card2 player1card6 . ."
-    ". . player1card8 player1card3 player1card4 player1card5 . ."
-    ". . . player1 player1 . . ."
-    ". . . player1 player1 . . .";
 }
 
-.player1 { grid-area: player1; }
+.player0 { grid-area: 8 / 4 / 10 / 6; }
 
-.player2 { grid-area: player2; }
+.player1 { grid-area: 1 / 4 / 3 / 6; }
 
-.player1card0 { grid-area: player1card1; }
+.player1card0 { grid-area: 6 / 4 / 7 / 5; }
 
-.player1card1 { grid-area: player1card2; }
+.player1card1 { grid-area: 6 / 5 / 7 / 6; }
 
-.player1card2 { grid-area: player1card3; }
+.player1card2 { grid-area: 7 / 4 / 8 / 5; }
 
-.player1card3 { grid-area: player1card4; }
+.player1card3 { grid-area: 7 / 5 / 8 / 6; }
 
-.player1card4 { grid-area: player1card5; }
+.player1card4 { grid-area: 7 / 6 / 8 / 7; }
 
-.player1card5 { grid-area: player1card6; }
+.player1card5 { grid-area: 6 / 6 / 7 / 7; }
 
-.player1card6 { grid-area: player1card7; }
+.player1card6 { grid-area: 6 / 3 / 7 / 4; }
 
-.player1card7 { grid-area: player1card8; }
+.player1card7 { grid-area: 7 / 3 / 8 / 4; }
 
-.player2card0 { grid-area: player2card1; }
+.player2card0 { grid-area: 4 / 5 / 5 / 6; }
 
-.player2card1 { grid-area: player2card2; }
+.player2card1 { grid-area: 4 / 4 / 5 / 5; }
 
-.player2card2 { grid-area: player2card3; }
+.player2card2 { grid-area: 3 / 5 / 4 / 6; }
 
-.player2card3 { grid-area: player2card4; }
+.player2card3 { grid-area: 3 / 4 / 4 / 5; }
 
-.player2card4 { grid-area: player2card5; }
+.player2card4 { grid-area: 3 / 3 / 4 / 4; }
 
-.player2card5 { grid-area: player2card6; }
+.player2card5 { grid-area: 4 / 3 / 5 / 4; }
 
-.player2card6 { grid-area: player2card7; }
+.player2card6 { grid-area: 4 / 6 / 5 / 7; }
 
-.player2card7 { grid-area: player2card8; }
+.player2card7 { grid-area: 3 / 6 / 4 / 7; }
+
+.playerField1 { grid-area: 6 / 3 / 10 / 7; }
+
+.playerField2 { grid-area: 1 / 3 / 5 / 7; }
 
     .playerIcon {
         background-color:#333;

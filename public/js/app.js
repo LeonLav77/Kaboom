@@ -42850,7 +42850,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_Pages_Home_vue":1,"resources_js_Pages_About_vue":1,"resources_js_Pages_Lobby_vue":1,"resources_js_Pages_Game_vue":1,"resources_js_Pages_Hello_vue":1,"resources_js_Pages_2PlayerTest_vue":1,"resources_js_Components_Navbar_vue":1,"resources_js_Components_PlayerIcon_vue":1,"resources_js_Components_Card_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_Pages_Home_vue":1,"resources_js_Pages_About_vue":1,"resources_js_Pages_Lobby_vue":1,"resources_js_Pages_Game_vue":1,"resources_js_Pages_Hello_vue":1,"resources_js_Pages_2PlayerTest_vue":1,"resources_js_Components_Navbar_vue":1,"resources_js_Components_PlayerIcon_vue":1,"resources_js_Components_Card_vue":1,"resources_js_Components_PlayerField_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
