@@ -35,11 +35,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -327,42 +322,6 @@ var render = function () {
         _c("div", { staticClass: "player2card7" }),
       ],
       2
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "wrapper2" },
-      _vm._l(_vm.hand, function (card, index) {
-        return _c("Card", {
-          key: index,
-          attrs: { card: card, index: index + 1 },
-        })
-      }),
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        on: {
-          click: function ($event) {
-            return _vm.makeMove()
-          },
-        },
-      },
-      [_vm._v("Make Move")]
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        on: {
-          click: function ($event) {
-            return _vm.dealCards()
-          },
-        },
-      },
-      [_vm._v("Deal Cards")]
     ),
   ])
 }

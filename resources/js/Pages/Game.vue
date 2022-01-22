@@ -19,11 +19,6 @@
         <div class="player2card6"></div>
         <div class="player2card7"></div>
     </div>
-      <div class="wrapper2">
-        <Card v-for="(card, index) in hand" :card="card" :index="index+1" :key="index" />
-      </div>
-      <button @click="makeMove()">Make Move</button>
-      <button @click="dealCards()">Deal Cards</button>
   </div>
 </template>
 
