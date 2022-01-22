@@ -4,11 +4,7 @@
         <div v-for="(player, index) in players" @click="logg()" :key="player.id" :class="'player'+index">
             <PlayerIcon v-if="player" :player="player" :index="index" />
         </div>
-        <!-- <div v-for="(player, index) in players" :index="index" :card="player.hand.card" :key="index">
-          <img :src="card.backsides" width="100" height="150" :id="index" />
-        </div> -->
-        <Card v-for="(card, index) in hand" :class="'player1card'+index" :card="card" :index="index" :key="index" />
-        <Card v-for="(card, index) in hand" :class="'player2card'+index" :card="card" :index="index" :key="index+10" />
+        <PlayerField  v-for="(player, index) in players" :player="player" :class="'cardField'+index" :index="index" :key="'player'+player.id" />
     </div>
   </div>
 </template>
@@ -25,12 +21,6 @@ export default {
       number_of_players: 0,
       me: null,
       hand : [],
-      player: {
-        name: '',
-        id: '',
-        cards: [],
-        photo: '',
-      },
       card:{
         value: '',
         color: '',
@@ -81,7 +71,6 @@ export default {
         mainchannel.error((err) => {
           console.log(err);
         });
-        // subscribe to gameMoves channel
         var gameMovesChannel = window.Echo.channel('moves.'+this.$route.params.id);
         gameMovesChannel.listen('Move', (e) => {
           // console.log(e);
@@ -98,7 +87,6 @@ methods: {
     });
   },
   logg(){
-    // find user by id in players array
     for(var i = 0; i < this.players.length; i++){
       if(this.players[i].id == this.me.id){
         console.log(this.players[i].hand);
@@ -110,7 +98,7 @@ methods: {
 }
 </script>
 
-<style scoped>
+<style>
 .containe{
   width: 100;
   height: 100;
@@ -118,66 +106,73 @@ methods: {
 .container {  
   height: 100vh;
   width: 100vw;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-auto-columns: 1fr;
-  gap: 0px 0px;
-  grid-auto-flow: row;
+  display: grid; 
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; 
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    ". . player1 . ."
+    ". cardField1 cardField1 cardField1 ."
+    ". cardField1 cardField1 cardField1 ."
+    ". playField playField playField ."
+    ". playField playField playField ."
+    ". cardField0 cardField0 cardField0 ."
+    ". cardField0 cardField0 cardField0 ."
+    ". . player0 . ."; 
+}
+.player0 {
+  grid-area: player0; 
+  justify-items: center;
+  align-items: center;
+}
+.player1 { grid-area: player1;
+  justify-items: center;
+  align-items: center;
+}
+.cardField0 { 
+  grid-area: cardField0; 
+  display: grid; 
+  grid-template-columns: 1fr 1fr 1fr 1fr; 
+  grid-template-rows: 1fr 1fr; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    "player0card6 player0card0 player0card1 player0card5"
+    "player0card7 player0card2 player0card3 player0card4"; 
+    /* start output from top */
+}
+.cardField1 { 
+  grid-area: cardField1; 
+  display: grid; 
+  grid-template-columns: 1fr 1fr 1fr 1fr; 
+  grid-template-rows: 1fr 1fr; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    "player1card6 player1card0 player1card1 player1card5"
+    "player1card7 player1card2 player1card3 player1card4"; 
 }
 
-.player0 { grid-area: 8 / 4 / 10 / 6; }
 
-.player1 { grid-area: 1 / 4 / 3 / 6; }
+.player0card0 { grid-area: player0card0; }
+.player0card1 { grid-area: player0card1; }
+.player0card2 { grid-area: player0card2; }
+.player0card3 { grid-area: player0card3; }
+.player0card4 { grid-area: player0card4; }
+.player0card5 { grid-area: player0card5; }
+.player0card6 { grid-area: player0card6; }
+.player0card7 { grid-area: player0card7; }
 
-.player1card0 { grid-area: 6 / 4 / 7 / 5; }
+.player1card0 { grid-area: player1card0; }
+.player1card1 { grid-area: player1card1; }
+.player1card2 { grid-area: player1card2; }
+.player1card3 { grid-area: player1card3; }
+.player1card4 { grid-area: player1card4; }
+.player1card5 { grid-area: player1card5; }
+.player1card6 { grid-area: player1card6; }
+.player1card7 { grid-area: player1card7; }
 
-.player1card1 { grid-area: 6 / 5 / 7 / 6; }
-
-.player1card2 { grid-area: 7 / 4 / 8 / 5; }
-
-.player1card3 { grid-area: 7 / 5 / 8 / 6; }
-
-.player1card4 { grid-area: 7 / 6 / 8 / 7; }
-
-.player1card5 { grid-area: 6 / 6 / 7 / 7; }
-
-.player1card6 { grid-area: 6 / 3 / 7 / 4; }
-
-.player1card7 { grid-area: 7 / 3 / 8 / 4; }
-
-.player2card0 { grid-area: 4 / 5 / 5 / 6; }
-
-.player2card1 { grid-area: 4 / 4 / 5 / 5; }
-
-.player2card2 { grid-area: 3 / 5 / 4 / 6; }
-
-.player2card3 { grid-area: 3 / 4 / 4 / 5; }
-
-.player2card4 { grid-area: 3 / 3 / 4 / 4; }
-
-.player2card5 { grid-area: 4 / 3 / 5 / 4; }
-
-.player2card6 { grid-area: 4 / 6 / 5 / 7; }
-
-.player2card7 { grid-area: 3 / 6 / 4 / 7; }
-
-.playerField1 { grid-area: 6 / 3 / 10 / 7; }
-
-.playerField2 { grid-area: 1 / 3 / 5 / 7; }
-
-    .playerIcon {
-        background-color:#333;
-        padding:20px;
-        border-radius:10px;
-        color:#fff;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:40px;
-        font-family:sans-serif;
-    }
-
-
-
+.playerIcon {
+  justify-items: center;
+  align-items: center;
+  }
+  .playField { grid-area: playField; }
 </style>

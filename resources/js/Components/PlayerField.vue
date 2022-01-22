@@ -1,8 +1,7 @@
 <template>
-        <div class="player1" @click="logg">
-            <PlayerIcon v-if="players[0]" :player="players[0]" :index="1" />
-        </div>
-        <!-- <Card v-for="(card, index) in hand" :class="'player1card'+index" :card="card" :index="index" :key="index" /> -->
+    <div>
+        <Card v-for="(card, index2) in player.hand" :player_id="player.id" :class="'player'+index+'card'+index2" :card="card" :index="index2" :key="index2" />
+    </div>
 </template>
 
 <script>
@@ -11,6 +10,16 @@ export default {
         PlayerIcon: () => import('../Components/PlayerIcon.vue'),
         Card: () => import('../Components/Card.vue'),
     },
+    props: {
+        player: {
+            type: Object,
+            required: true,
+        },
+        index: {
+            type: Number,
+            required: true,
+        },
+    }
 }
 </script>
 

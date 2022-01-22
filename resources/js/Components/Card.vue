@@ -17,12 +17,19 @@ export default {
       type: Number,
       required: true,
     },
+    player_id: {
+      type: Number,
+      required: true,
+    },
   },
   methods: {
     revealCard(){
+      // console.log(this.card);
+      // console.log(this.index);
       axios.post('/api/revealCard', {
         game_id: this.$route.params.id,
-        card_id: this.index
+        card_id: this.index,
+        player_id: this.player_id,
       })
       .then(response => {
         console.log(response.data);

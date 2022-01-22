@@ -33,8 +33,9 @@ class GameController extends Controller
         $user_id = Auth::user()->id;
         $game_id = $request->game_id;
         $card_id = $request->card_id;
+        $player_id = $request->player_id;
         $deck = Deck::getDeck($game_id);
-        $card = $deck->revealCard($user_id,$card_id);
+        $card = $deck->revealCard($user_id,$card_id,$player_id);
         $deck->save();
         return json_encode($card);
     }

@@ -92,11 +92,14 @@ class Deck {
         $this->hands[$user_id] = $cards;
         return $cards;
     }
-    public function revealCard($user_id,$card_id){
+    public function revealCard($user_id,$card_id,$player_id){
         // if user has more than 2 revealed cards, return false
+        if($user_id != $player_id){
+            return "you can only look at your cards";
+        }
         if(isset($this->revealedInHand[$user_id]) && count($this->revealedInHand[$user_id]) >= 2){
             return "Already looked at your cards";
-        }
+        } 
         // return count($this->revealedInHand[$user_id]);
         $this->revealedInHand[$user_id][] = $this->hands[$user_id][$card_id];
         return $this->hands[$user_id][$card_id];

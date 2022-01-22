@@ -17,7 +17,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -25,6 +24,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     Card: function Card() {
       return __webpack_require__.e(/*! import() */ "resources_js_Components_Card_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../Components/Card.vue */ "./resources/js/Components/Card.vue"));
+    }
+  },
+  props: {
+    player: {
+      type: Object,
+      required: true
+    },
+    index: {
+      type: Number,
+      required: true
     }
   }
 });
@@ -117,12 +126,13 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "player1", on: { click: _vm.logg } },
-    [
-      _vm.players[0]
-        ? _c("PlayerIcon", { attrs: { player: _vm.players[0], index: 1 } })
-        : _vm._e(),
-    ],
+    _vm._l(_vm.player.hand, function (card, index2) {
+      return _c("Card", {
+        key: index2,
+        class: "player" + _vm.index + "card" + index2,
+        attrs: { player_id: _vm.player.id, card: card, index: index2 },
+      })
+    }),
     1
   )
 }

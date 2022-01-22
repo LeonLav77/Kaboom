@@ -28,13 +28,20 @@ __webpack_require__.r(__webpack_exports__);
     index: {
       type: Number,
       required: true
+    },
+    player_id: {
+      type: Number,
+      required: true
     }
   },
   methods: {
     revealCard: function revealCard() {
+      // console.log(this.card);
+      // console.log(this.index);
       axios.post('/api/revealCard', {
         game_id: this.$route.params.id,
-        card_id: this.index
+        card_id: this.index,
+        player_id: this.player_id
       }).then(function (response) {
         console.log(response.data);
       })["catch"](function (error) {
