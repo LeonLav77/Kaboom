@@ -1,6 +1,9 @@
 <template>
   <div class="containe">
       <div class="container">
+        <div class="errorField">
+          {{ error }}
+        </div>
         <div v-for="(player, index) in players" @click="logg()" :key="player.id" :class="'player'+index">
             <PlayerIcon v-if="player" :player="player" :index="index" />
         </div>
@@ -8,7 +11,7 @@
         <Deck :side="'left'" v-on:draw="draw" />
         <Deck :side="'right'" v-on:draw="draw" />
     </div>
-    <CardModal v-if="showModal" v-on:closeModal="closeModal" />
+    <CardModal v-if="showModal" v-on:closeModal="closeModal" v-on:throwCard="throwCard" :image="this.drawnCard" />
   </div>
 </template>
 
@@ -33,7 +36,16 @@ export default {
         backsides: 'http://127.0.0.1:8000/storage/Cards/card_backsides.png',
         frontside: '',
       },
-      showModal: false
+      showModal: false,
+      drawnCard: {
+        value: '',
+        color: '',
+        suit: '',
+        backsides: '',
+        frontside: '',
+      },
+      error: '',
+      myTurn: false,
     }),
     mounted() {
       window.Echo.leave();
@@ -41,8 +53,8 @@ export default {
         .then(response => {
           this.me = response.data;
             // console.log(this.me);
-            var gameUserChannel = window.Echo.private('game.'+this.$route.params.id+'_user.'+this.me.id);
-            gameUserChannel.listen('DealCards', (e) => {
+        var gameUserChannel = window.Echo.private('game.'+this.$route.params.id+'_user.'+this.me.id);
+        gameUserChannel.listen('DealCards', (e) => {
               // console.log(e.hand);
               this.hand = e.hand;
             });
@@ -52,9 +64,11 @@ export default {
             .then(response => {
               console.log(response.data);
               if(response.data == this.me.id) {
-                // alert("You have the turn");
+                this.error = "Your turn";
+                this.myTurn = true;
               }else{
-                // alert("You don't have the turn");
+                this.error = "Opponents turn";
+                this.myTurn = false;
               }
             });
           this.dealCards();
@@ -84,8 +98,11 @@ export default {
         mainchannel.error((err) => {
           console.log(err);
         });
-        var gameMovesChannel = window.Echo.channel('turns.'+this.$route.params.id);
+        var gameMovesChannel = window.Echo.channel('moves.'+this.$route.params.id);
         gameMovesChannel.listen('Turn', (e) => {
+          console.log(e);
+        });
+        gameMovesChannel.listen('ThrowCard', (e) => {
           console.log(e);
         });
         });
@@ -95,9 +112,6 @@ methods: {
     axios.post('/api/dealCards', {
       game_id: this.$route.params.id
     })
-    .then(response => {
-      // console.log(response.data); 
-    });
   },
   logg(){
     for(var i = 0; i < this.players.length; i++){
@@ -112,15 +126,40 @@ methods: {
                 game_id: this.$route.params.id
             })
             .then(response => {
-                this.displayModal();
-                console.log(response.data); 
+                if(this.myTurn){
+                  this.displayModal(response.data);
+                  // console.log(response.data[0]); 
+                  this.drawnCard = response.data[0];
+                }else{
+                  // console.log(response.data);
+                }
             });
         },
-        displayModal(){
+        displayModal() {
             this.showModal = true;
         },
         closeModal(){
             this.showModal = false;
+        },
+        throwCard(){
+            axios.post('/api/throwCard', {
+                game_id: this.$route.params.id,
+                card: this.drawnCard
+            })
+            .then(response => {
+                console.log(response.data);
+                this.drawnCard = response.data[0];
+            });
+        },
+        takeCard(){
+            axios.post('/api/takeCard', {
+                game_id: this.$route.params.id,
+                card: this.drawnCard
+            })
+            .then(response => {
+                console.log(response.data);
+                this.drawnCard = response.data;
+            });
         },
   }
 }
@@ -139,7 +178,7 @@ methods: {
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
   gap: 0px 0px; 
   grid-template-areas: 
-    ". . player1 . ."
+    "errorField . player1 . ."
     ". cardField1 cardField1 cardField1 ."
     ". cardField1 cardField1 cardField1 ."
     ". playField playField playField ."
@@ -196,6 +235,8 @@ methods: {
 .player1card5 { grid-area: player1card5; }
 .player1card6 { grid-area: player1card6; }
 .player1card7 { grid-area: player1card7; }
+
+.errorField { grid-area: errorField; }
 
 .playerIcon {
   justify-items: center;

@@ -46,6 +46,10 @@ Route::get('/turn',[GameController::class,'getTurn']);
 
 Route::post('/draw',[GameController::class,'draw']);
 
+Route::post('/throwCard',[GameController::class,'throwCard']);
+
+Route::post('/takeCard',[GameController::class,'takeCard']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

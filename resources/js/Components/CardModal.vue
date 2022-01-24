@@ -3,26 +3,22 @@
       <div class="modal-wrapper">
         <div class="modal-container">
 
-          <div class="modal-header">
-            <slot name="header">
-              default header
-            </slot>
-          </div>
-
           <div class="modal-body">
             <slot name="body">
-              default body
+              <img :src="image.frontside" alt="yes" width="300" height="450">
             </slot>
           </div>
 
-          <div class="modal-footer">
             <slot name="footer">
-              default footer
-              <button class="modal-default-button" @click="closeModal()">
-                OK
+                <center>
+              <button class="modal-default-button" @click="throwCard()">
+                Throw Card
               </button>
+             <button class="modal-default-button" @click="takeCard()">
+                Take Card
+              </button>
+              </center>
             </slot>
-          </div>
         </div>
       </div>
     </div>
@@ -34,7 +30,21 @@ export default {
         closeModal() {
             this.$emit('closeModal');
         },
+        throwCard() {
+            this.closeModal();
+            this.$emit('throwCard');
+        },
+        takeCard() {
+            this.closeModal();
+            this.$emit('takeCard');
+        },
     },
+    props: {
+        image: {
+            type: Object,
+            required: true,
+        },
+    }
 }
 </script>
 

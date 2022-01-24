@@ -25,6 +25,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     PlayerIcon: function PlayerIcon() {
@@ -56,7 +59,16 @@ __webpack_require__.r(__webpack_exports__);
         backsides: 'http://127.0.0.1:8000/storage/Cards/card_backsides.png',
         frontside: ''
       },
-      showModal: false
+      showModal: false,
+      drawnCard: {
+        value: '',
+        color: '',
+        suit: '',
+        backsides: '',
+        frontside: ''
+      },
+      error: '',
+      myTurn: false
     };
   },
   mounted: function mounted() {
@@ -76,8 +88,12 @@ __webpack_require__.r(__webpack_exports__);
         axios.get('/api/turn?game_id=' + _this.$route.params.id).then(function (response) {
           console.log(response.data);
 
-          if (response.data == _this.me.id) {// alert("You have the turn");
-          } else {// alert("You don't have the turn");
+          if (response.data == _this.me.id) {
+            _this.error = "Your turn";
+            _this.myTurn = true;
+          } else {
+            _this.error = "Opponents turn";
+            _this.myTurn = false;
           }
         });
 
@@ -100,8 +116,11 @@ __webpack_require__.r(__webpack_exports__);
       mainchannel.error(function (err) {
         console.log(err);
       });
-      var gameMovesChannel = window.Echo.channel('turns.' + _this.$route.params.id);
+      var gameMovesChannel = window.Echo.channel('moves.' + _this.$route.params.id);
       gameMovesChannel.listen('Turn', function (e) {
+        console.log(e);
+      });
+      gameMovesChannel.listen('ThrowCard', function (e) {
         console.log(e);
       });
     });
@@ -110,7 +129,6 @@ __webpack_require__.r(__webpack_exports__);
     dealCards: function dealCards() {
       axios.post('/api/dealCards', {
         game_id: this.$route.params.id
-      }).then(function (response) {// console.log(response.data); 
       });
     },
     logg: function logg() {
@@ -128,9 +146,13 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/draw', {
         game_id: this.$route.params.id
       }).then(function (response) {
-        _this2.displayModal();
+        if (_this2.myTurn) {
+          _this2.displayModal(response.data); // console.log(response.data[0]); 
 
-        console.log(response.data);
+
+          _this2.drawnCard = response.data[0];
+        } else {// console.log(response.data);
+        }
       });
     },
     displayModal: function displayModal() {
@@ -138,6 +160,28 @@ __webpack_require__.r(__webpack_exports__);
     },
     closeModal: function closeModal() {
       this.showModal = false;
+    },
+    throwCard: function throwCard() {
+      var _this3 = this;
+
+      axios.post('/api/throwCard', {
+        game_id: this.$route.params.id,
+        card: this.drawnCard
+      }).then(function (response) {
+        console.log(response.data);
+        _this3.drawnCard = response.data[0];
+      });
+    },
+    takeCard: function takeCard() {
+      var _this4 = this;
+
+      axios.post('/api/takeCard', {
+        game_id: this.$route.params.id,
+        card: this.drawnCard
+      }).then(function (response) {
+        console.log(response.data);
+        _this4.drawnCard = response.data;
+      });
     }
   }
 });
@@ -160,7 +204,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.containe{\r\n  width: 100;\r\n  height: 100;\n}\n.container {  \r\n  height: 100vh;\r\n  width: 100vw;\r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \". . player1 . .\"\r\n    \". cardField1 cardField1 cardField1 .\"\r\n    \". cardField1 cardField1 cardField1 .\"\r\n    \". playField playField playField .\"\r\n    \". playField playField playField .\"\r\n    \". cardField0 cardField0 cardField0 .\"\r\n    \". cardField0 cardField0 cardField0 .\"\r\n    \". . player0 . .\";\n}\n.player0 {\r\n  grid-area: player0; \r\n  justify-items: center;\r\n  align-items: center;\n}\n.player1 { grid-area: player1;\r\n  justify-items: center;\r\n  align-items: center;\n}\n.cardField0 { \r\n  grid-area: cardField0; \r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \"player0card6 player0card0 player0card1 player0card5\"\r\n    \"player0card7 player0card2 player0card3 player0card4\";\n}\n.cardField1 { \r\n  grid-area: cardField1; \r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \"player1card6 player1card0 player1card1 player1card5\"\r\n    \"player1card7 player1card2 player1card3 player1card4\";\n}\n.player0card0 { grid-area: player0card0;\n}\n.player0card1 { grid-area: player0card1;\n}\n.player0card2 { grid-area: player0card2;\n}\n.player0card3 { grid-area: player0card3;\n}\n.player0card4 { grid-area: player0card4;\n}\n.player0card5 { grid-area: player0card5;\n}\n.player0card6 { grid-area: player0card6;\n}\n.player0card7 { grid-area: player0card7;\n}\n.player1card0 { grid-area: player1card0;\n}\n.player1card1 { grid-area: player1card1;\n}\n.player1card2 { grid-area: player1card2;\n}\n.player1card3 { grid-area: player1card3;\n}\n.player1card4 { grid-area: player1card4;\n}\n.player1card5 { grid-area: player1card5;\n}\n.player1card6 { grid-area: player1card6;\n}\n.player1card7 { grid-area: player1card7;\n}\n.playerIcon {\r\n  justify-items: center;\r\n  align-items: center;\n}\n.playField {\r\n    grid-area: playField; \r\n    display: flex;\r\n    align-items: center;\n}\n.left {\r\n    justify-content: left;\n}\n.right {\r\n    justify-content: right;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.containe{\r\n  width: 100;\r\n  height: 100;\n}\n.container {  \r\n  height: 100vh;\r\n  width: 100vw;\r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \"errorField . player1 . .\"\r\n    \". cardField1 cardField1 cardField1 .\"\r\n    \". cardField1 cardField1 cardField1 .\"\r\n    \". playField playField playField .\"\r\n    \". playField playField playField .\"\r\n    \". cardField0 cardField0 cardField0 .\"\r\n    \". cardField0 cardField0 cardField0 .\"\r\n    \". . player0 . .\";\n}\n.player0 {\r\n  grid-area: player0; \r\n  justify-items: center;\r\n  align-items: center;\n}\n.player1 { grid-area: player1;\r\n  justify-items: center;\r\n  align-items: center;\n}\n.cardField0 { \r\n  grid-area: cardField0; \r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \"player0card6 player0card0 player0card1 player0card5\"\r\n    \"player0card7 player0card2 player0card3 player0card4\";\n}\n.cardField1 { \r\n  grid-area: cardField1; \r\n  display: grid; \r\n  grid-template-columns: 1fr 1fr 1fr 1fr; \r\n  grid-template-rows: 1fr 1fr; \r\n  gap: 0px 0px; \r\n  grid-template-areas: \r\n    \"player1card6 player1card0 player1card1 player1card5\"\r\n    \"player1card7 player1card2 player1card3 player1card4\";\n}\n.player0card0 { grid-area: player0card0;\n}\n.player0card1 { grid-area: player0card1;\n}\n.player0card2 { grid-area: player0card2;\n}\n.player0card3 { grid-area: player0card3;\n}\n.player0card4 { grid-area: player0card4;\n}\n.player0card5 { grid-area: player0card5;\n}\n.player0card6 { grid-area: player0card6;\n}\n.player0card7 { grid-area: player0card7;\n}\n.player1card0 { grid-area: player1card0;\n}\n.player1card1 { grid-area: player1card1;\n}\n.player1card2 { grid-area: player1card2;\n}\n.player1card3 { grid-area: player1card3;\n}\n.player1card4 { grid-area: player1card4;\n}\n.player1card5 { grid-area: player1card5;\n}\n.player1card6 { grid-area: player1card6;\n}\n.player1card7 { grid-area: player1card7;\n}\n.errorField { grid-area: errorField;\n}\n.playerIcon {\r\n  justify-items: center;\r\n  align-items: center;\n}\n.playField {\r\n    grid-area: playField; \r\n    display: flex;\r\n    align-items: center;\n}\n.left {\r\n    justify-content: left;\n}\n.right {\r\n    justify-content: right;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -302,6 +346,10 @@ var render = function () {
         "div",
         { staticClass: "container" },
         [
+          _c("div", { staticClass: "errorField" }, [
+            _vm._v("\n        " + _vm._s(_vm.error) + "\n      "),
+          ]),
+          _vm._v(" "),
           _vm._l(_vm.players, function (player, index) {
             return _c(
               "div",
@@ -341,7 +389,10 @@ var render = function () {
       ),
       _vm._v(" "),
       _vm.showModal
-        ? _c("CardModal", { on: { closeModal: _vm.closeModal } })
+        ? _c("CardModal", {
+            attrs: { image: this.drawnCard },
+            on: { closeModal: _vm.closeModal, throwCard: _vm.throwCard },
+          })
         : _vm._e(),
     ],
     1

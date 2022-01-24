@@ -33,3 +33,6 @@ Broadcast::channel('game.{game_id}', function ($user, $game_id) {
 Broadcast::channel('game.{game_id}_user.{user_id}', function ($game_id) {
     return "true";
 });
+Broadcast::channel('moves.{game_id}', function () {
+    return true;
+});

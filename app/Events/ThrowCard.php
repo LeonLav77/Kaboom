@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class Turn
+class ThrowCard implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -24,12 +24,13 @@ class Turn
     public $game_id;
     public function __construct($game_id)
     {
+        $this->user = Auth::user()->id;
         $this->game_id = $game_id;
-        $this->user = Auth::user();
     }
     public function broadcastWith(){
         return [
-            'turn' => "move made",
+            'user' => $this->user,
+            'game_id' => $this->game_id, 
         ];
     }
     /**

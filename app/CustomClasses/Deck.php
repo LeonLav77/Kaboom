@@ -17,6 +17,7 @@ class Deck {
     public $revealedInHand = [];
     public $first_turn = null;
     public $turn = null;
+    public $currentCard = null;
     public function __construct($game_id,$first_turn){
         $this->game_id = $game_id;
         $this->first_turn = $first_turn;
@@ -96,6 +97,9 @@ class Deck {
         if($addToHand){
             $this->addToHand($cards,$user_id);
         }
+        else{
+            $this->currentCard = $cards[0];
+        }
         return $cards;
     }
     public function addToHand($cards,$user_id){
@@ -128,5 +132,22 @@ class Deck {
         }
         return false;
     }
+    public function throwCard($user_id,$card){
+        if(!$this->checkTurn($user_id)){
+            return "It's not your turn";
+        }elseif($this->currentCard == null){
+            return "No card to throw";
+        }elseif(!(
+            $this->currentCard->number == $card['number'] &&
+            $this->currentCard->suit == $card['suit'] &&
+            $this->currentCard->color == $card['color']
+            )){
+            return "Wrong card";
+        }
+        return "success";
+    }
+    // elseif(!isset($this->hands[$user_id][$card])){
+    //     return "You don't have that card";
+    // }
 }
 ?>

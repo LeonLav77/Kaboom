@@ -37,14 +37,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   methods: {
     closeModal: function closeModal() {
       this.$emit('closeModal');
+    },
+    throwCard: function throwCard() {
+      this.closeModal();
+      this.$emit('throwCard');
+    },
+    takeCard: function takeCard() {
+      this.closeModal();
+      this.$emit('takeCard');
+    }
+  },
+  props: {
+    image: {
+      type: Object,
+      required: true
     }
   }
 });
@@ -203,54 +213,64 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "modal-mask" }, [
     _c("div", { staticClass: "modal-wrapper" }, [
-      _c("div", { staticClass: "modal-container" }, [
-        _c(
-          "div",
-          { staticClass: "modal-header" },
-          [
-            _vm._t("header", function () {
-              return [_vm._v("\n          default header\n        ")]
-            }),
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "modal-body" },
-          [
-            _vm._t("body", function () {
-              return [_vm._v("\n          default body\n        ")]
-            }),
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "modal-footer" },
-          [
-            _vm._t("footer", function () {
-              return [
-                _vm._v("\n          default footer\n          "),
+      _c(
+        "div",
+        { staticClass: "modal-container" },
+        [
+          _c(
+            "div",
+            { staticClass: "modal-body" },
+            [
+              _vm._t("body", function () {
+                return [
+                  _c("img", {
+                    attrs: {
+                      src: _vm.image.frontside,
+                      alt: "yes",
+                      width: "300",
+                      height: "450",
+                    },
+                  }),
+                ]
+              }),
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _vm._t("footer", function () {
+            return [
+              _c("center", [
                 _c(
                   "button",
                   {
                     staticClass: "modal-default-button",
                     on: {
                       click: function ($event) {
-                        return _vm.closeModal()
+                        return _vm.throwCard()
                       },
                     },
                   },
-                  [_vm._v("\n            OK\n          ")]
+                  [_vm._v("\n            Throw Card\n          ")]
                 ),
-              ]
-            }),
-          ],
-          2
-        ),
-      ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "modal-default-button",
+                    on: {
+                      click: function ($event) {
+                        return _vm.takeCard()
+                      },
+                    },
+                  },
+                  [_vm._v("\n            Take Card\n          ")]
+                ),
+              ]),
+            ]
+          }),
+        ],
+        2
+      ),
     ]),
   ])
 }

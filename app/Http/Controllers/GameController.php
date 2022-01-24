@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\Move;
+use App\Events\Turn;
 use App\Events\MakeDeck;
 use App\Events\DealCards;
+use App\Events\ThrowCard;
 use App\CustomClasses\Deck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,4 +49,34 @@ class GameController extends Controller
             return json_encode("Not your turn");
         }
     }
+    public function takeCard(Request $request){
+        $user_id = Auth::user()->id;
+        $deck = Deck::getDeck($request->game_id);
+        if($deck->checkTurn($user_id)){
+            $card = $deck->takeCard($user_id);
+            $deck->save();
+            return json_encode($card);
+        }else{
+            return json_encode("Not your turn");
+        }
+    }
+    public function throwCard(Request $request){
+        $user_id = Auth::user()->id;
+        $deck = Deck::getDeck($request->game_id);
+        $card = $request->card;
+        $game_id = $request->game_id;
+        // broadcast(new ThrowCard($user_id,$request->game_id,$card));
+        broadcast(new ThrowCard($game_id));
+        if($deck->checkTurn($user_id)){
+            $resp = $deck->throwCard($user_id,$card);
+            if($resp != "success"){
+                return json_encode("failed");
+            }
+            $deck->save();
+            return json_encode($card);
+        }else{
+            return json_encode("Not your turn");
+        }
+    }
 }
+
