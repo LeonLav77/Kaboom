@@ -34,15 +34,17 @@ Route::post('/startCountdown',[LobbyController::class,'startCountdown']);
 
 Route::post('/startGame',[LobbyController::class,'startGame']);
 
-Route::get('/makeDeck',[GameController::class,'test']);
-
 Route::post('/makeDeck',[GameController::class,'makeDeck']);
 
-Route::post('makeMove',[GameController::class,'makeMove']);
+Route::post('/makeMove',[GameController::class,'makeMove']);
 
-Route::post('dealCards',[GameController::class,'dealCards']);
+Route::post('/dealCards',[GameController::class,'dealCards']);
 
 Route::post('/revealCard',[GameController::class,'revealCard']);
+
+Route::get('/turn',[GameController::class,'getTurn']);
+
+Route::post('/draw',[GameController::class,'draw']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

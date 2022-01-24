@@ -15,8 +15,16 @@ class Deck {
     public $game_id = null;
     public $hands = [];
     public $revealedInHand = [];
-    public function __construct($game_id){
+    public $first_turn = null;
+    public $turn = null;
+    public function __construct($game_id,$first_turn){
         $this->game_id = $game_id;
+        $this->first_turn = $first_turn;
+        $deck = $this->makeDeck();
+        $this->deck = $deck;
+        return $this->deck;
+    }
+    public function makeDeck(){
         $deck = [];
         $suits = ['heart','diamond','spade','club'];
         foreach($suits as $suit){
@@ -52,9 +60,9 @@ class Deck {
                     $deck[] = new Basic($i, $suit, $i, $color, $name);
                 }
             }
+
         }
-        $this->deck = $deck;
-        return $this->deck;
+        return $deck;
     }
     public function shuffle(){
         shuffle($this->deck);
@@ -80,17 +88,18 @@ class Deck {
         }
         return null;
     }
-    // public function draw(){
-    //     $card = array_pop($this->deck);
-    //     return $card;
-    // }
-    public function drawN($n,$user_id){
+    public function drawN($n,$user_id,$addToHand = false){
         $cards = [];
         for($i=0;$i<$n;$i++){
             $cards[] = array_pop($this->deck);
         }
-        $this->hands[$user_id] = $cards;
+        if($addToHand){
+            $this->addToHand($cards,$user_id);
+        }
         return $cards;
+    }
+    public function addToHand($cards,$user_id){
+        $this->hands[$user_id] = $cards;
     }
     public function revealCard($user_id,$card_id,$player_id){
         // if user has more than 2 revealed cards, return false
@@ -103,6 +112,21 @@ class Deck {
         // return count($this->revealedInHand[$user_id]);
         $this->revealedInHand[$user_id][] = $this->hands[$user_id][$card_id];
         return $this->hands[$user_id][$card_id];
+    }
+    public function getTurn(){
+        return $this->first_turn;
+    }
+    public function nextTurn(){
+
+    }
+    public function moveDraw($user_id){
+
+    }
+    public function checkTurn($user_id){
+        if($this->first_turn == $user_id){
+            return true;
+        }
+        return false;
     }
 }
 ?>

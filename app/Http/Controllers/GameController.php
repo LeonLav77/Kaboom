@@ -13,15 +13,6 @@ use Illuminate\Broadcasting\BroadcastEvent;
 
 class GameController extends Controller
 {
-    public function test(){
-        // $deck = new Deck(2);
-        // $deck->shuffle();
-        // Redis::del('deck_2');
-        // $deck->save();
-        // return $deck->get();
-        $deck = Deck::getDeck(2);
-        return $deck;
-    }
     public function makeMove(Request $request){
         broadcast(new Move($request->game_id));
     }
@@ -38,5 +29,22 @@ class GameController extends Controller
         $card = $deck->revealCard($user_id,$card_id,$player_id);
         $deck->save();
         return json_encode($card);
+    }
+    public function getTurn(Request $request){
+        $game_id = $request->game_id;
+        $deck = Deck::getDeck($game_id);
+        $turn = $deck->getTurn();
+        return json_encode($turn);
+    }
+    public function draw(request $request){
+        $user_id = Auth::user()->id;
+        $deck = Deck::getDeck($request->game_id);
+        if($deck->checkTurn($user_id)){
+            $card = $deck->drawN(1,$user_id);
+            $deck->save();
+            return json_encode($card);
+        }else{
+            return json_encode("Not your turn");
+        }
     }
 }

@@ -5,9 +5,10 @@
             <PlayerIcon v-if="player" :player="player" :index="index" />
         </div>
         <PlayerField  v-for="(player, index) in players" :player="player" :class="'cardField'+index" :index="index" :key="'player'+player.id" />
-        <Deck :side="'left'" />
-        <Deck :side="'right'" />
+        <Deck :side="'left'" v-on:draw="draw" />
+        <Deck :side="'right'" v-on:draw="draw" />
     </div>
+    <CardModal v-if="showModal" v-on:closeModal="closeModal" />
   </div>
 </template>
 
@@ -18,6 +19,7 @@ export default {
         Card: () => import('../Components/Card.vue'),
         PlayerField: () => import('../Components/PlayerField.vue'),
         Deck: () => import('../Components/Deck.vue'),
+        CardModal: () => import('../Components/CardModal.vue'),
     },
     data: () => ({
       players: [],
@@ -30,9 +32,11 @@ export default {
         suit: '',
         backsides: 'http://127.0.0.1:8000/storage/Cards/card_backsides.png',
         frontside: '',
-      }
+      },
+      showModal: false
     }),
     mounted() {
+      window.Echo.leave();
       axios.post('/api/userInfo')
         .then(response => {
           this.me = response.data;
@@ -42,19 +46,25 @@ export default {
               // console.log(e.hand);
               this.hand = e.hand;
             });
-      window.Echo.leave();
         var mainchannel = window.Echo.join('game.'+this.$route.params.id);
         mainchannel.here((users) => {
+          axios.get('/api/turn?game_id='+this.$route.params.id)
+            .then(response => {
+              console.log(response.data);
+              if(response.data == this.me.id) {
+                // alert("You have the turn");
+              }else{
+                // alert("You don't have the turn");
+              }
+            });
           this.dealCards();
           users.forEach(user => {
-            // console.log(user);
             user.hand = [
               this.card,
               this.card,
               this.card,
               this.card,
             ];
-            // this.players[user.id].push(user);
             this.players.push(user);
             });
         });
@@ -74,9 +84,9 @@ export default {
         mainchannel.error((err) => {
           console.log(err);
         });
-        var gameMovesChannel = window.Echo.channel('moves.'+this.$route.params.id);
-        gameMovesChannel.listen('Move', (e) => {
-          // console.log(e);
+        var gameMovesChannel = window.Echo.channel('turns.'+this.$route.params.id);
+        gameMovesChannel.listen('Turn', (e) => {
+          console.log(e);
         });
         });
 },
@@ -86,7 +96,7 @@ methods: {
       game_id: this.$route.params.id
     })
     .then(response => {
-      // console.log(response.data);
+      // console.log(response.data); 
     });
   },
   logg(){
@@ -96,8 +106,23 @@ methods: {
       }
     }
     console.log(this.players);
+  },
+          draw(){
+            axios.post('/api/draw', {
+                game_id: this.$route.params.id
+            })
+            .then(response => {
+                this.displayModal();
+                console.log(response.data); 
+            });
+        },
+        displayModal(){
+            this.showModal = true;
+        },
+        closeModal(){
+            this.showModal = false;
+        },
   }
-}
 }
 </script>
 
@@ -141,7 +166,6 @@ methods: {
   grid-template-areas: 
     "player0card6 player0card0 player0card1 player0card5"
     "player0card7 player0card2 player0card3 player0card4"; 
-    /* start output from top */
 }
 .cardField1 { 
   grid-area: cardField1; 

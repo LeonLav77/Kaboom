@@ -46,7 +46,7 @@ class StartGame implements ShouldBroadcast
             GameUsers::addUser($game->id,$userId);
         }
         // create a deck and assign it to the game id
-        $deck = new Deck($game->id);
+        $deck = new Deck($game->id,$lobbyUsersIds[0]);
         $deck->shuffle();
         $deck->save();
     }

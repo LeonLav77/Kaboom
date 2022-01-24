@@ -23,6 +23,11 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       required: true
     }
+  },
+  methods: {
+    draw: function draw() {
+      this.$emit('draw');
+    }
   }
 });
 
@@ -120,6 +125,11 @@ var render = function () {
         width: "100",
         height: "150",
         alt: "deck",
+      },
+      on: {
+        click: function ($event) {
+          return _vm.draw()
+        },
       },
     }),
   ])

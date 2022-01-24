@@ -2,8 +2,8 @@
 
 namespace App\Events;
 
-use App\CustomClasses\Deck;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class DealCards implements ShouldBroadcast
+class Turn
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,22 +20,16 @@ class DealCards implements ShouldBroadcast
      *
      * @return void
      */
+    public $user;
     public $game_id;
-    public $deck;
-    public $user_id;
-    public $hand;
-    public function __construct($game_id,$user_id)
+    public function __construct($game_id)
     {
         $this->game_id = $game_id;
-        $this->user_id = $user_id;
-        $this->deck = Deck::getDeck($this->game_id);
-        $this->hand = $this->deck->drawN(4,$this->user_id,true);
-        $this->deck->save();
+        $this->user = Auth::user();
     }
     public function broadcastWith(){
         return [
-            'deck' => $this->deck,
-            'hand' => $this->hand,
+            'turn' => "move made",
         ];
     }
     /**
@@ -45,6 +39,7 @@ class DealCards implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('game.' . $this->game_id . '_user.' . $this->user_id);
+        return new Channel('turns.'. $this->game_id);
+
     }
 }
